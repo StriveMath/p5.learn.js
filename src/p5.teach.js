@@ -30,7 +30,6 @@ p5.prototype.BOTTOM_LEFT = "bottom-left";
 // Set the default angleMode to degrees.
 p5.prototype._angleMode = p5.prototype.DEGREES;
 // Set the default coordinateMode to top-left.
-console.log("p5.teach.js");
 p5.prototype._coordinateMode = p5.prototype.TOP_LEFT;
 
 /**
@@ -39,7 +38,6 @@ p5.prototype._coordinateMode = p5.prototype.TOP_LEFT;
  * @param {Constant} mode either TOP_LEFT or BOTTOM_LEFT
  */
 p5.prototype.coordinateMode = function (mode) {
-   console.log("> coordinateMode", mode, this._coordinateMode);
    if (mode === this._coordinateMode)
       return;
 
@@ -53,11 +51,9 @@ p5.prototype.coordinateMode = function (mode) {
       default:
          throw new p5Error(`coordinateMode() was expecting TOP_LEFT|BOTTOM_LEFT for the first parameter, received ${mode} instead`);
    }
-   console.log("< coordinateMode", this._coordinateMode);
 }
 
 p5.prototype._setCoordinateModeTopLeft = function () {
-   // console.log("_setCoordinateModeTopLeft");
    this._coordinateMode = this.TOP_LEFT;
    if (this._renderer.isP3D) {
       // this.scale(1, -1);
@@ -68,7 +64,6 @@ p5.prototype._setCoordinateModeTopLeft = function () {
 };
 
 p5.prototype._setCoordinateModeBottomLeft = function () {
-   // console.log("_setCoordinateModeBottomLeft");
    this._coordinateMode = this.BOTTOM_LEFT;
    if (this._renderer.isP3D) {
       // this.scale(1, -1);
@@ -79,7 +74,6 @@ p5.prototype._setCoordinateModeBottomLeft = function () {
 };
 
 p5.prototype._applyCoordinateModeBeforeDraw = function () {
-   // console.log("_applyCoordinateModeBeforeDraw", this);
    switch (this._coordinateMode) {
       case this.BOTTOM_LEFT:
          this._setCoordinateModeBottomLeft();
@@ -232,7 +226,6 @@ p5.prototype.drawTickAxes = function (
    tickThickness = 3,
    gridThickness = 0.25
 ) {
-   // console.log("drawTickAxes", this._coordinateMode);
    // this.rightHanded();
    this.push();
    this.textSize(labelSize / scaleFactor);
