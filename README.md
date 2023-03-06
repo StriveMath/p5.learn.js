@@ -1,0 +1,3 @@
+# p5.teach.js
+
+p5.teach.js is a library for [p5.js](https://github.com/processing/p5.js) developed by [Strive](https://www.strivemath.com/) to aid in teaching coding. It extends p5.js with a bottom left coordinate mode mimicking the standard mathematical setup where coordinate (0,0) is in the bottom left and the y-axis moves upwards. It also adds functions for drawing tick axes, graphs, arrows and more.
