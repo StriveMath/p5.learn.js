@@ -18,7 +18,7 @@ Load [p5.teach.js](https://github.com/StriveMath/p5.teach.js/blob/main/src/p5.te
 ```js
 coordinateMode(mode);
 ```
-coordinateMode allows you to change the coordinateMode from top left to bottom left ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/tickAxes/sketch.js))
+coordinateMode allows you to change the coordinateMode from top left to bottom left ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/tickAxes/sketch.js)).
 
 | Argument      | Description               | Value                   | Default                 |
 | ------------- | ------------------------- | ----------------------- | ----------------------- |
@@ -91,7 +91,7 @@ Draws a vector V with origin (O_x, O_y) and optional dash rendering
 | O_x           | the x coordinate of the tail of the vector | number                  | -                       |
 | O_y             | the y coordinate of the tail of the vector | number                  | -                       |
 | V             | the head of the vector | p5.Vector                  | -                       |
-| dash             | the y-coordinate of the arrow's head | boolean or list                  | false                       |
+| dash             | the y-coordinate of the arrow's head | boolean \| number[]                  | false                       |
 
 ## createMovableCircle()
 ```js
@@ -106,7 +106,7 @@ draw() {
    circle.draw()
 }
 ```
-Creates a circle that users can drag about the canvas with their mouse.
+Creates a circle that users can drag about the canvas with their mouse ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/movablecircle/sketch.js)).
 
 | Argument      | Description                 | Value                   | Default                 |
 | ------------- | --------------------------- | ----------------------- | ----------------------- |
@@ -146,7 +146,7 @@ Draws a single die that displays a number 1-6.
 ```js
 drawBarGraph(data, [labels], [width], [height], [barScale])
 ```
-Draws a simple bar graph given an Array of data.
+Draws a simple bar graph given an Array of data ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/bargraph/sketch.js)).
 
 | Argument      | Description                 | Value                   | Default                 |
 | ------------- | --------------------------- | ----------------------- | ----------------------- |
@@ -161,7 +161,7 @@ Draws a simple bar graph given an Array of data.
 ```js
 draw3DAxes(size, [clr])
 ```
-Draws a set of x, y, and z-axes along with translucent planes.
+Draws a set of x, y, and z-axes along with translucent planes ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/3daxes/sketch.js)).
 
 | Argument      | Description                 | Value                   | Default                 |
 | ------------- | --------------------------- | ----------------------- | ----------------------- |
