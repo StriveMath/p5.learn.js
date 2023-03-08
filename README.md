@@ -116,7 +116,7 @@ Creates a circle that users can drag about the canvas with their mouse ([example
 | clr             | the circle's color when hovered over | string \| p5.Color                  | "red"                       |
 
 ### lock()
-locks the circle movement along the x or y axis
+locks the circle movement along the x or y axis.
 
 | Property      | Description                 | Value                   | Default                 |
 | ------------- | --------------------------- | ----------------------- | -- |
@@ -124,7 +124,7 @@ locks the circle movement along the x or y axis
 | value | lock or unlock circle movement | boolean | -                       |
 
 ### draw()
-draws the circle
+draws the circle.
 
 ## die()
 ```js
