@@ -18,7 +18,7 @@ Load [p5.teach.js](https://github.com/StriveMath/p5.teach.js/blob/main/src/p5.te
 ```js
 coordinateMode(mode);
 ```
-coordinateMode allows you to change the coordinateMode from top left to bottom left ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/tickAxes/sketch.js)).
+Allows you to set the coordinate mode to TOP_LEFT or BOTTOM_LEFT ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/tickAxes/sketch.js)).
 
 | Argument      | Description               | Value                   | Default                 |
 | ------------- | ------------------------- | ----------------------- | ----------------------- |
@@ -47,7 +47,7 @@ Draws x and y-axes with tick marks, labels, and gridlines ([example](https://git
 ```js
 bounce(maxNum, minNum, speed)
 ```
-bounce returns a number that moves up and down between maxNum and minNum with a given speed ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/signals/sketch.js)).
+Returns a number that moves up and down between maxNum and minNum with a given speed ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/signals/sketch.js)).
 
 | Argument      | Description                 | Value                   | Default                 |
 | ------------- | --------------------------- | ----------------------- | ----------------------- |
@@ -59,7 +59,7 @@ bounce returns a number that moves up and down between maxNum and minNum with a 
 ```js
 wave(maxNum, minNum, speed)
 ```
-bounce returns a number that waves up and down between maxNum and minNum with a given speed ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/signals/sketch.js)).
+Returns a number that waves up and down between maxNum and minNum with a given speed ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/signals/sketch.js)).
 
 | Argument      | Description                 | Value                   | Default                 |
 | ------------- | --------------------------- | ----------------------- | ----------------------- |
@@ -82,7 +82,7 @@ Draws text positioned upwards and rightwards independent of rotation and scale.
 
 ## drawVector()
 ```js
-drawVector(O_x, O_y, V, dash)
+drawVector(O_x, O_y, V, [dash])
 ```
 Draws a vector V with origin (O_x, O_y) and optional dash rendering
 
@@ -116,7 +116,7 @@ Creates a circle that users can drag about the canvas with their mouse ([example
 | clr             | the circle's color when hovered over | string \| p5.Color                  | "red"                       |
 
 ### lock()
-locks the circle movement along the x or y axis.
+Locks the circle movement along the x or y axis.
 
 | Property      | Description                 | Value                   | Default                 |
 | ------------- | --------------------------- | ----------------------- | -- |
