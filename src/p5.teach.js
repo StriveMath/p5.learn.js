@@ -1,3 +1,10 @@
+/*
+    Copyright (C) 2021-2023 Nick McIntyre, Maxim Schoemaker, Ibrahim Almetwale. All rights reserved.
+    Developed by Strive: https://www.strivemath.com/
+    Source: https://github.com/StriveMath/p5-python-web
+*/
+
+
 // ====================================
 // Coordinate System
 // ====================================
@@ -191,14 +198,10 @@ p5.prototype.responsiveText = function (val, x, y) {
    const transform_matrix = this.drawingContext.getTransform();
    const xScale = Math.sign(transform_matrix.a)
    const yScale = Math.sign(transform_matrix.d)
-   if (this._coordinateMode === this.BOTTOM_LEFT) {
-      this.push();
-      this.scale(xScale, yScale);
-      this._text(val, x, -y);
-      this.pop();
-   } else {
-      this._text(val, x, y);
-   }
+   this.push();
+   this.scale(xScale, yScale);
+   this._text(val, x, -y);
+   this.pop();
 };
 
 /**
@@ -226,10 +229,10 @@ p5.prototype.drawTickAxes = function (
    tickThickness = 3,
    gridThickness = 0.25
 ) {
-   // this.rightHanded();
    this.push();
    this.textSize(labelSize / scaleFactor);
    this.textAlign(this.CENTER, this.CENTER);
+   const yDir = this._coordinateMode === this.TOP_LEFT ? -1 : 1;
    for (let y = 0; y < this.height / scaleFactor; y += spacing / scaleFactor) {
       // tickmarks
       this.stroke(axisColor);
@@ -241,8 +244,8 @@ p5.prototype.drawTickAxes = function (
       if (y !== 0) {
          this.fill(labelColor);
          this.noStroke();
-         this.responsiveText(y, 2 * this.textSize(), y);
-         this.responsiveText(-y, 2 * this.textSize(), -y);
+         this.responsiveText(y, 2 * this.textSize(), y * yDir);
+         this.responsiveText(-y, 2 * this.textSize(), -y * yDir);
       }
 
       // gridlines
