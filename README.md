@@ -18,7 +18,7 @@ Load [p5.teach.js](https://github.com/StriveMath/p5.teach.js/blob/main/src/p5.te
 ```js
 coordinateMode(mode);
 ```
-Allows you to set the coordinate mode to TOP_LEFT or BOTTOM_LEFT ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/tickAxes/sketch.js)).
+Sets the coordinate mode to TOP_LEFT or BOTTOM_LEFT. Coordinate mode TOP_LEFT by default. BOTTOM_LEFT mode mimicking the standard mathematical setup where coordinate (0,0) is in the bottom left and the y-axis moves upwards ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/tickAxes/sketch.js)).
 
 | Argument      | Description               | Value                   | Default                 |
 | ------------- | ------------------------- | ----------------------- | ----------------------- |
@@ -124,7 +124,7 @@ Locks the circle movement along the x or y axis.
 | value | lock or unlock circle movement | boolean | -                       |
 
 ### draw()
-draws the circle.
+Draws the circle.
 
 ## die()
 ```js
