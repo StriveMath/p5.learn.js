@@ -18,7 +18,7 @@ Load [p5.teach.js](https://github.com/StriveMath/p5.teach.js/blob/main/src/p5.te
 ```js
 coordinateMode(mode);
 ```
-Sets the coordinate mode to TOP_LEFT or BOTTOM_LEFT. Coordinate mode is set to TOP_LEFT by default. BOTTOM_LEFT mode mimicking the standard mathematical setup where coordinate (0,0) is in the bottom left and the y-axis moves upwards ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/tickAxes/sketch.js)).
+Sets the coordinate mode to TOP_LEFT or BOTTOM_LEFT. Coordinate mode is set to TOP_LEFT by default. BOTTOM_LEFT mode mimicks the standard mathematical setup where coordinate (0,0) is in the bottom left and the y-axis moves upwards ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/tickAxes/sketch.js)).
 
 | Argument      | Description               | Value                   | Default                 |
 | ------------- | ------------------------- | ----------------------- | ----------------------- |
