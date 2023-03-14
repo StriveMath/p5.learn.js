@@ -266,7 +266,7 @@ p5.prototype.drawTickAxes = function (
       if (x !== 0) {
          this.fill(labelColor);
          this.noStroke();
-         this.responsiveText(x, x, 1.5 * this.textSize());
+         this.responsiveText(x, x, yDir * 1.5 * this.textSize());
          this.responsiveText(-x, -x, 1.5 * this.textSize());
       }
 
