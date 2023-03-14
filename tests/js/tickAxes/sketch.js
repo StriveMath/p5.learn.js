@@ -1,6 +1,6 @@
 function setup() {
-  coordinateMode(BOTTOM_LEFT)
   createCanvas(400, 400);
+  coordinateMode(BOTTOM_LEFT)
 }
 
 function draw() {
