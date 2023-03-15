@@ -819,21 +819,21 @@ p5.prototype.loadFont = function (path, name) {
  *  @param {String} color the color of the crosshair
  *  @param {Number} thickness the thickness of the crosshair
  */
-p5.prototype.crosshair = (color="white", thickness = 1) => {
+p5.prototype.crosshair = function (color = "white", thickness = 1) {
     let x = this.mouseX;
     let y = this.mouseY;
 
-    push();
-    cursor("NONE");
+    this.push();
+    this.cursor("NONE");
     this.fill(color);
     this.stroke(color);
     this.strokeWeight(thickness);
-    this.line(0, y, width, y);
+    this.line(0, y, this.width, y);
     this.text(`x: ${x} y:${y}`, x + 16, y + 16)
-    this.line(x, 0, x, height);
-    this.strokeWeight(thickness*3);
+    this.line(x, 0, x, this.height);
+    this.strokeWeight(thickness * 3);
     this.stroke("red");
-    this.line(x-10, y, x+10, y);
-    this.line(x, y-10, x, y+10);
-    pop();
+    this.line(x - 10, y, x + 10, y);
+    this.line(x, y - 10, x, y + 10);
+    this.pop();
 }
