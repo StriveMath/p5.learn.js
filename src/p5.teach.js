@@ -39,6 +39,7 @@ p5.prototype._angleMode = p5.prototype.DEGREES;
 // Set the default coordinateMode to top-left.
 p5.prototype._coordinateMode = p5.prototype.TOP_LEFT;
 
+
 /**
  * Sets the coordinate system mode to either top-left or bottom-left
  *
@@ -92,6 +93,58 @@ p5.prototype.registerMethod("pre", function () {
     this._applyCoordinateModeBeforeDraw()
 });
 
+// ====================================
+// Strive Assets
+// ====================================
+
+p5.prototype.BIRD_IMAGE = "https://dl.airtable.com/.attachments/1c88eb90be22cdaeee8a724a69b6d63c/782f8c15/bird.gif";
+p5.prototype.CAR_IMAGE = "https://dl.airtable.com/.attachments/b4a15433a4d1c27dc85605d74bde8232/f3798dc3/car.png";
+p5.prototype.CLICK_SOUND = "https://dl.airtable.com/.attachments/f493ec584fdefa1c001b53d563a4d605/dabd1a3e/click.mp3";
+p5.prototype.CLOUD_DRAWING_IMAGE = "https://dl.airtable.com/.attachments/02dbdb58cd51234b8d0b668239744bb9/2733a62d/cloud-drawing.png";
+p5.prototype.CLOUD_VECTOR_IMAGE = "https://dl.airtable.com/.attachments/132c8bcdd5d8ab17af7bd1076d71cd4c/36628434/cloud-vector.png";
+p5.prototype.DEATH_SOUND = "https://dl.airtable.com/.attachments/43bc2c9d16ae834f983c14f6ddd2893c/03687ac0/444670__tissman__death.wav";
+p5.prototype.DEEP_SPACE_SOUND = "https://dl.airtable.com/.attachments/2fc2386167a2dc8faf7c1ac6293ca0fb/9869f3ab/deepSpace.mp3";
+p5.prototype.DEJA_VU_SOUND = "https://dl.airtable.com/.attachments/26d828b39542764ac067e58b0ecfba10/9a74db71/deja-vu.mp3";
+p5.prototype.DOG_WOOF_SOUND = "https://dl.airtable.com/.attachments/f102bcb5934be688e068a213210ce370/a917a498/DogWoofSound.mp4"
+p5.prototype.DVD_IMAGE = "https://dl.airtable.com/.attachments/f3c5f6daf56f53977ad18bf48580cd88/26a770db/dvd.png";
+p5.prototype.DVD_LOGO_IMAGE = "https://dl.airtable.com/.attachments/787e32768f10b78c9bd6b42662a93003/f9bebf76/dvd_logo1600.png";
+p5.prototype.ENGINE_RUMBLE_SOUND = "https://dl.airtable.com/.attachments/010b6e882f5a3ec8c43fa381a801ca62/9ddcde0a/vertical.wav"
+p5.prototype.FAIRY_IMAGE = "https://dl.airtable.com/.attachments/ea7a76bcbc7ad45899e7faa9383b4dce/fe1e5a45/fairy.png";
+p5.prototype.FAST_STONE_SLIDING_SOUND = "https://dl.airtable.com/.attachments/448d815bb32353c82bbda509bceb7f4e/cadcda97/Fast-stone-sliding.mp3";
+p5.prototype.FLAPPY_BIRD_IMAGE = "https://dl.airtable.com/.attachments/1cacef53638588781a9470d799fee0fe/8854fdf6/bird.png";
+p5.prototype.GUITAR_1_SOUND = "https://dl.airtable.com/.attachments/f703a2d0c33b64a6349a41bcd29863a8/f2c13e0b/guitar1.wav";
+p5.prototype.GUITAR_2_SOUND = "https://dl.airtable.com/.attachments/d713b2bc841e008998b535ade3b7c3e8/fe6772f0/guitar2.wav";
+p5.prototype.GUITAR_3_SOUND = "https://dl.airtable.com/.attachments/88420268ceb2c0d170bb50b479ec9764/2809b246/guitar3.wav";
+p5.prototype.GUITAR_4_SOUND = "https://dl.airtable.com/.attachments/5bef1e8694ff2a0a5934ce0e4428ecb5/28124baa/guitar4.wav";
+p5.prototype.HIT_MARKER_SOUND = "https://dl.airtable.com/.attachments/91d4db34ec224ebecc19485cb5165c5b/31fb1e87/hitmarker_2.mp3";
+p5.prototype.KEY_PRESS_SOUND = "https://dl.airtable.com/.attachments/3d341f283a5b67d6f61b0e4d97a7d6b2/53bfc9e3/KeyPress.mp3"
+p5.prototype.LASER_SOUND = "https://dl.airtable.com/.attachments/701e69fe1aa034c962bdb9ff3a81982a/fefe1521/laser.mp3";
+p5.prototype.LASER_GUN_SOUND = "https://dl.airtable.com/.attachments/06bb6c3645957e188eb4d3a22ccaec35/87539054/LaserGunSoundEffect.mp3"
+p5.prototype.LETS_GO_SOUND = "https://dl.airtable.com/.attachments/8b24fbce993c2f50c63731a5c8088bf3/a9f5d630/score.mp3";
+p5.prototype.MONKEYS_BACKGROUND_SOUND = "https://dl.airtable.com/.attachments/8ad351bd144463bf6969ad0039cbe652/b02e42f3/Monkeys-Spinning-Monkeys.mp3";
+p5.prototype.MOUSE_CLICK_SOUND = "https://dl.airtable.com/.attachments/61bdd31e90c83829fae16faceb3c123e/99be076d/clicksoundeffect.mp3";
+p5.prototype.ORBITRON_BOLD_FONT = "https://dl.airtable.com/.attachments/db516c246064218d0e773b589569f562/226b476d/Orbitron-Bold.ttf";
+p5.prototype.PARTICLE_IMAGE = "https://dl.airtable.com/.attachments/0d9efe363aa06b0c84e6a547d3f47f01/7a507700/particle.png";
+p5.prototype.PIXEL_ALIEN_IMAGE = "https://dl.airtable.com/.attachments/332a97bfd0242a5450768a9ab6556efe/c2c3eb30/blockalien-removebg-preview.png"
+p5.prototype.POP_SOUND = "https://dl.airtable.com/.attachments/64e5800158e4b9382aef77a6d4c3a65f/2cbd86ca/pop.mp3";
+p5.prototype.RAIN_SOUND = "https://dl.airtable.com/.attachments/fca1b993557211308786f4dafba4ea18/0ac0b7f9/rain.mp3";
+p5.prototype.ROCKET_IMAGE = "https://dl.airtable.com/.attachments/d8d55857f52b4d1d540532c34579b8fc/e0290b23/rocket.png";
+p5.prototype.SHOT_SOUND = "https://dl.airtable.com/.attachments/6520858392f2f6c22b52193b2e965d6e/d78c0865/shot.wav";
+p5.prototype.SHWOOSH_SOUND = "https://dl.airtable.com/.attachments/f4c9684c6bd25761e368c25b3efacd04/5b242ddc/horizontal.wav";
+p5.prototype.SLIDING_STONE_SOUND = "https://dl.airtable.com/.attachments/d662d792ae22c7419b9de5374a790e98/ed76a793/slidingstone.mp3";
+p5.prototype.SNOW_PARTICLES_IMAGE = "https://dl.airtable.com/.attachments/fde1c294b15b4c37c655fbc0622eea07/1e583904/snow_particles.png";
+p5.prototype.SOFT_BG_IMAGE = "https://dl.airtable.com/.attachments/d87ad5e0ede19515a0421ab1687642cb/8fa56474/softBackground.jpg";
+p5.prototype.SPACK_BACKGROUND_IMAGE = "https://dl.airtable.com/.attachments/3c73cd47c91a0e6c0713699003abba83/235293ce/spacebackground.jpg"
+p5.prototype.STEAM_IMAGE = "https://dl.airtable.com/.attachments/15cf003e71a8a9160dfb063eaa3cb306/92e0adbf/steam.gif";
+p5.prototype.SUGAR_IMAGE = "https://dl.airtable.com/.attachments/e1720c16a0c42f15b457baa619d1f509/c86130a1/sugar.png";
+p5.prototype.SUN_IMAGE = "https://dl.airtable.com/.attachments/823c657fe99e6b683de917196356f408/796c63ad/2k_sun.jpg";
+p5.prototype.TEA_IMAGE = "https://dl.airtable.com/.attachments/86811c98dfe7fa4fea136604660c580f/b239fe16/tea.png";
+p5.prototype.TROLL_FACE_IMAGE = "https://dl.airtable.com/.attachments/db6f3130645e00e127b898f13fc21c70/cccdfe65/troll-face.png";
+p5.prototype.VIDEO_GAME_DEATH_SOUND = "https://dl.airtable.com/.attachments/6c5545fbb856abe10f1ac22ff7b6e4ce/c5c754d9/VideogameDeathSoundEffectHD_NoCopyright.mp4"
+p5.prototype.WATER_IMAGE = "https://dl.airtable.com/.attachments/0450a6bccc58d47eeb6ececd4cb5f26a/40691c5d/water.png";
+p5.prototype.WHOOSH_SOUND = "https://dl.airtable.com/.attachments/a36667d7431eb83e64221441acde3c05/56c6b0d1/whoosh.mp3";
+p5.prototype.WINDOWS_OPEN_SOUND = "https://dl.airtable.com/.attachments/3e9a4f12ca7b7b2a6c3f02837fc8059e/a491a589/windows_open_sound.mp3";
+p5.prototype.ZOMBIE_DEATH_SOUND = "https://dl.airtable.com/.attachments/22b67da51a8e30af4e81e4d53a13b9e6/31cd5105/ZombieDeathSoundEffect.mp3";
 
 // ====================================
 // Strive Extensions
