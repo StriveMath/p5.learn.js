@@ -181,12 +181,12 @@ p5.prototype.redraw = function () {
   this._redraw(...arguments);
 };
 
-p5.prototype.bounce = function (maxNum, minNum, speed) {
+p5.prototype.bounce = function (minNum, maxNum, speed) {
   const amp = maxNum - minNum;
   return Math.abs(((this.frameCount * speed) % (2 * amp)) - amp) + minNum;
 };
 
-p5.prototype.wave = function (maxNum, minNum, speed) {
+p5.prototype.wave = function (minNum, maxNum, speed) {
   const range = maxNum - minNum;
   const a = (1 / 2) * (maxNum - minNum);
   const b = (1 / 2) * (maxNum + minNum);
