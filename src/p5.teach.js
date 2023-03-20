@@ -4,7 +4,6 @@
     Source: https://github.com/StriveMath/p5-python-web
 */
 
-
 // ====================================
 // Coordinate System
 // ====================================
@@ -45,53 +44,53 @@ p5.prototype._coordinateMode = p5.prototype.TOP_LEFT;
  * @param {Constant} mode either TOP_LEFT or BOTTOM_LEFT
  */
 p5.prototype.coordinateMode = function (mode) {
-    if (mode === this._coordinateMode)
-        return;
+  if (mode === this._coordinateMode) return;
 
-    switch (mode) {
-        case this.TOP_LEFT:
-            this._setCoordinateModeTopLeft();
-            break;
-        case this.BOTTOM_LEFT:
-            this._setCoordinateModeBottomLeft();
-            break;
-        default:
-            throw new p5Error(`coordinateMode() was expecting TOP_LEFT|BOTTOM_LEFT for the first parameter, received ${mode} instead`);
-    }
-}
+  switch (mode) {
+    case this.TOP_LEFT:
+      this._setCoordinateModeTopLeft();
+      break;
+    case this.BOTTOM_LEFT:
+      this._setCoordinateModeBottomLeft();
+      break;
+    default:
+      throw new p5Error(
+        `coordinateMode() was expecting TOP_LEFT|BOTTOM_LEFT for the first parameter, received ${mode} instead`
+      );
+  }
+};
 
 p5.prototype._setCoordinateModeTopLeft = function () {
-    this._coordinateMode = this.TOP_LEFT;
-    if (this._renderer.isP3D) {
-        // this.scale(1, -1);
-    } else {
-        this.scale(1, -1);
-        this.translate(0, -this.height);
-    }
+  this._coordinateMode = this.TOP_LEFT;
+  if (this._renderer.isP3D) {
+    // this.scale(1, -1);
+  } else {
+    this.scale(1, -1);
+    this.translate(0, -this.height);
+  }
 };
 
 p5.prototype._setCoordinateModeBottomLeft = function () {
-    this._coordinateMode = this.BOTTOM_LEFT;
-    if (this._renderer.isP3D) {
-        // this.scale(1, -1);
-    } else {
-        this.translate(0, this.height);
-        this.scale(1, -1);
-    }
+  this._coordinateMode = this.BOTTOM_LEFT;
+  if (this._renderer.isP3D) {
+    // this.scale(1, -1);
+  } else {
+    this.translate(0, this.height);
+    this.scale(1, -1);
+  }
 };
 
 p5.prototype._applyCoordinateModeBeforeDraw = function () {
-    switch (this._coordinateMode) {
-        case this.BOTTOM_LEFT:
-            this._setCoordinateModeBottomLeft();
-            break;
-    }
-}
+  switch (this._coordinateMode) {
+    case this.BOTTOM_LEFT:
+      this._setCoordinateModeBottomLeft();
+      break;
+  }
+};
 
 p5.prototype.registerMethod("pre", function () {
-    this._applyCoordinateModeBeforeDraw()
+  this._applyCoordinateModeBeforeDraw();
 });
-
 
 // ====================================
 // Strive Extensions
@@ -99,93 +98,100 @@ p5.prototype.registerMethod("pre", function () {
 
 p5.prototype._createCanvas = p5.prototype.createCanvas;
 p5.prototype.createCanvas = function () {
-    this._createCanvas(...arguments);
-    this._applyCoordinateModeBeforeDraw();
-}
+  this._createCanvas(...arguments);
+  this._applyCoordinateModeBeforeDraw();
+};
 
 p5.prototype._text = p5.prototype.text;
 p5.prototype.text = function (str, x, y) {
-    if (this._coordinateMode === this.BOTTOM_LEFT) {
-        this.push();
-        this.scale(1, -1);
-        this._text(str, x, -y);
-        this.pop();
-    } else {
-        this._text(str, x, y);
-    }
+  if (this._coordinateMode === this.BOTTOM_LEFT) {
+    this.push();
+    this.scale(1, -1);
+    this._text(str, x, -y);
+    this.pop();
+  } else {
+    this._text(str, x, y);
+  }
 };
 
 p5.prototype._image = p5.prototype.image;
-p5.prototype.image = function (img, x, y, width, height, sx, sy, sWidth, sHeight) {
-    if (this._coordinateMode === this.BOTTOM_LEFT) {
+p5.prototype.image = function (
+  img,
+  x,
+  y,
+  width,
+  height,
+  sx,
+  sy,
+  sWidth,
+  sHeight
+) {
+  if (this._coordinateMode === this.BOTTOM_LEFT) {
+    this._setCoordinateModeTopLeft();
 
-        this._setCoordinateModeTopLeft();
-
-        let defH = img.height;
-        if (img.elt && img.elt.videoWidth && !img.canvas) {
-            // video no canvas
-            defH = img.elt.videoHeight;
-        }
-
-        const _height = height ?? defH;
-        arguments[2] = this.height - y - _height;
-
-        this._image(...arguments);
-
-        this._setCoordinateModeBottomLeft();
-    } else {
-        this._image(...arguments);
+    let defH = img.height;
+    if (img.elt && img.elt.videoWidth && !img.canvas) {
+      // video no canvas
+      defH = img.elt.videoHeight;
     }
-}
+
+    const _height = height ?? defH;
+    arguments[2] = this.height - y - _height;
+
+    this._image(...arguments);
+
+    this._setCoordinateModeBottomLeft();
+  } else {
+    this._image(...arguments);
+  }
+};
 
 p5.Element.prototype._position = p5.Element.prototype.position;
 p5.Element.prototype.position = function () {
-    if (this._coordinateMode === this.BOTTOM_LEFT) {
-        arguments[1] = this._pInst.height - arguments[1];
-        this._position(...arguments);
-    } else {
-        this._position(...arguments);
-    }
-}
+  if (this._coordinateMode === this.BOTTOM_LEFT) {
+    arguments[1] = this._pInst.height - arguments[1];
+    this._position(...arguments);
+  } else {
+    this._position(...arguments);
+  }
+};
 
-p5.prototype.__updateNextMouseCoords = p5.prototype._updateNextMouseCoords
+p5.prototype.__updateNextMouseCoords = p5.prototype._updateNextMouseCoords;
 p5.prototype._updateNextMouseCoords = function (evt) {
-    if (this._coordinateMode === this.BOTTOM_LEFT && !this._renderer.isP3D) {
-        const _evt = new Proxy(evt, {
-            get: (target, prop) => {
-                if (prop === "clientY")
-                    return this.height - target[prop];
-                if (prop === "movementY")
-                    return -target[prop]
-                return target[prop];
-            }
-        });
-        this.__updateNextMouseCoords(_evt);
-    } else {
-        this.__updateNextMouseCoords(...arguments);
-    }
-}
+  if (this._coordinateMode === this.BOTTOM_LEFT && !this._renderer.isP3D) {
+    const _evt = new Proxy(evt, {
+      get: (target, prop) => {
+        if (prop === "clientY") return this.height - target[prop];
+        if (prop === "movementY") return -target[prop];
+        return target[prop];
+      },
+    });
+    this.__updateNextMouseCoords(_evt);
+  } else {
+    this.__updateNextMouseCoords(...arguments);
+  }
+};
 
-p5.prototype._redraw = p5.prototype.redraw
+p5.prototype._redraw = p5.prototype.redraw;
 p5.prototype.redraw = function () {
-    if (!this.assetsLoaded()) {
-        return;
-    }
+  if (!this.assetsLoaded()) {
+    return;
+  }
 
-    this._redraw(...arguments);
-}
+  this._redraw(...arguments);
+};
 
 p5.prototype.bounce = function (maxNum, minNum, speed) {
-    const amp = maxNum - minNum
-    return Math.abs((this.frameCount * speed) % (2 * amp) - amp) + minNum
-}
+  const amp = maxNum - minNum;
+  return Math.abs(((this.frameCount * speed) % (2 * amp)) - amp) + minNum;
+};
 
 p5.prototype.wave = function (maxNum, minNum, speed) {
-    const range = maxNum - minNum;
-    const a = 1 / 2 * (maxNum - minNum)
-    const b = 1 / 2 * (maxNum + minNum)
-    return a * Math.sin((this.frameCount * speed / range + 0.5) * Math.PI) + b
-}
+  const range = maxNum - minNum;
+  const a = (1 / 2) * (maxNum - minNum);
+  const b = (1 / 2) * (maxNum + minNum);
+  return a * Math.sin(((this.frameCount * speed) / range + 0.5) * Math.PI) + b;
+};
 
 /**x
  * Draws text that always "correctly", regardless of the coordinate system.
@@ -195,13 +201,13 @@ p5.prototype.wave = function (maxNum, minNum, speed) {
  * @param {*} y   the y-coordinate of the text
  */
 p5.prototype.responsiveText = function (val, x, y) {
-    const transform_matrix = this.drawingContext.getTransform();
-    const xScale = Math.sign(transform_matrix.a)
-    const yScale = Math.sign(transform_matrix.d)
-    this.push();
-    this.scale(xScale, yScale);
-    this._text(val, x, -y);
-    this.pop();
+  const transform_matrix = this.drawingContext.getTransform();
+  const xScale = Math.sign(transform_matrix.a);
+  const yScale = Math.sign(transform_matrix.d);
+  this.push();
+  this.scale(xScale, yScale);
+  this._text(val, x, -y);
+  this.pop();
 };
 
 /**
@@ -219,74 +225,74 @@ p5.prototype.responsiveText = function (val, x, y) {
  * @param {Number} gridThickness  the thickness to draw the gridlines
  */
 p5.prototype.drawTickAxes = function (
-    scaleFactor = 1,
-    spacing = 50,
-    axisColor = "rgb(20,45,217)",
-    gridColor = "rgba(255,255,255,0.6)",
-    labelColor = "white",
-    labelSize = 12,
-    axisThickness = 5,
-    tickThickness = 3,
-    gridThickness = 0.25
+  scaleFactor = 1,
+  spacing = 50,
+  axisColor = "rgb(20,45,217)",
+  gridColor = "rgba(255,255,255,0.6)",
+  labelColor = "white",
+  labelSize = 12,
+  axisThickness = 5,
+  tickThickness = 3,
+  gridThickness = 0.25
 ) {
-    this.push();
-    this.textSize(labelSize / scaleFactor);
-    this.textAlign(this.CENTER, this.CENTER);
-    const yDir = this._coordinateMode === this.TOP_LEFT ? -1 : 1;
-    for (let y = 0; y < this.height / scaleFactor; y += spacing / scaleFactor) {
-        // tickmarks
-        this.stroke(axisColor);
-        this.strokeWeight(tickThickness / scaleFactor);
-        this.line(5 / scaleFactor, y, -5 / scaleFactor, y);
-        this.line(5 / scaleFactor, -y, -5 / scaleFactor, -y);
-
-        // labels
-        if (y !== 0) {
-            this.fill(labelColor);
-            this.noStroke();
-            this.responsiveText(y, 2 * this.textSize(), y * yDir);
-            this.responsiveText(-y, 2 * this.textSize(), -y * yDir);
-        }
-
-        // gridlines
-        this.strokeWeight(gridThickness / scaleFactor);
-        this.stroke(this.color(gridColor));
-        this.line(-this.width / scaleFactor, y, this.width / scaleFactor, y);
-        this.line(-this.width / scaleFactor, -y, this.width / scaleFactor, -y);
-    }
-
-    for (let x = 0; x < this.width / scaleFactor; x += spacing / scaleFactor) {
-        // tickmarks
-        this.stroke(axisColor);
-        this.strokeWeight(tickThickness / scaleFactor);
-        this.line(x, 5 / scaleFactor, x, -5 / scaleFactor);
-        this.line(-x, 5 / scaleFactor, -x, -5 / scaleFactor);
-
-        // labels
-        if (x !== 0) {
-            this.fill(labelColor);
-            this.noStroke();
-            this.responsiveText(x, x, yDir * 1.5 * this.textSize());
-            this.responsiveText(-x, -x, 1.5 * this.textSize());
-        }
-
-        // gridlines
-        this.strokeWeight(gridThickness / scaleFactor);
-        this.stroke(this.color(gridColor));
-        this.line(x, -this.height, x, this.height);
-        this.line(-x, -this.height, -x, this.height);
-    }
+  this.push();
+  this.textSize(labelSize / scaleFactor);
+  this.textAlign(this.CENTER, this.CENTER);
+  const yDir = this._coordinateMode === this.TOP_LEFT ? -1 : 1;
+  for (let y = 0; y < this.height / scaleFactor; y += spacing / scaleFactor) {
+    // tickmarks
     this.stroke(axisColor);
-    this.strokeWeight(axisThickness / scaleFactor);
-    // x-axis
-    this.line(-this.width / scaleFactor, 0, this.width / scaleFactor, 0);
-    // y-axis
-    this.line(0, this.height / scaleFactor, 0, -this.height / scaleFactor);
-    // origin
-    this.fill(labelColor);
-    this.noStroke();
-    this.responsiveText(0, this.textSize(), this.textSize());
-    this.pop();
+    this.strokeWeight(tickThickness / scaleFactor);
+    this.line(5 / scaleFactor, y, -5 / scaleFactor, y);
+    this.line(5 / scaleFactor, -y, -5 / scaleFactor, -y);
+
+    // labels
+    if (y !== 0) {
+      this.fill(labelColor);
+      this.noStroke();
+      this.responsiveText(y, 2 * this.textSize(), y * yDir);
+      this.responsiveText(-y, 2 * this.textSize(), -y * yDir);
+    }
+
+    // gridlines
+    this.strokeWeight(gridThickness / scaleFactor);
+    this.stroke(this.color(gridColor));
+    this.line(-this.width / scaleFactor, y, this.width / scaleFactor, y);
+    this.line(-this.width / scaleFactor, -y, this.width / scaleFactor, -y);
+  }
+
+  for (let x = 0; x < this.width / scaleFactor; x += spacing / scaleFactor) {
+    // tickmarks
+    this.stroke(axisColor);
+    this.strokeWeight(tickThickness / scaleFactor);
+    this.line(x, 5 / scaleFactor, x, -5 / scaleFactor);
+    this.line(-x, 5 / scaleFactor, -x, -5 / scaleFactor);
+
+    // labels
+    if (x !== 0) {
+      this.fill(labelColor);
+      this.noStroke();
+      this.responsiveText(x, x, yDir * 1.5 * this.textSize());
+      this.responsiveText(-x, -x, 1.5 * this.textSize());
+    }
+
+    // gridlines
+    this.strokeWeight(gridThickness / scaleFactor);
+    this.stroke(this.color(gridColor));
+    this.line(x, -this.height, x, this.height);
+    this.line(-x, -this.height, -x, this.height);
+  }
+  this.stroke(axisColor);
+  this.strokeWeight(axisThickness / scaleFactor);
+  // x-axis
+  this.line(-this.width / scaleFactor, 0, this.width / scaleFactor, 0);
+  // y-axis
+  this.line(0, this.height / scaleFactor, 0, -this.height / scaleFactor);
+  // origin
+  this.fill(labelColor);
+  this.noStroke();
+  this.responsiveText(0, this.textSize(), this.textSize());
+  this.pop();
 };
 
 /**
@@ -299,25 +305,25 @@ p5.prototype.drawTickAxes = function (
  * @param {Number} headY the y-coordinate of the arrow's head
  */
 p5.prototype.arrow = function (tailX, tailY, headX, headY) {
-    let x = headX - tailX;
-    let y = headY - tailY;
+  let x = headX - tailX;
+  let y = headY - tailY;
 
-    this.push();
+  this.push();
 
-    this.translate(tailX, tailY);
-    this.line(0, 0, x, y);
+  this.translate(tailX, tailY);
+  this.line(0, 0, x, y);
 
-    if (x >= 0) {
-        this.rotate(this.atan(y / x));
-    } else {
-        this.rotate(this.PI + this.atan(y / x));
-    }
+  if (x >= 0) {
+    this.rotate(this.atan(y / x));
+  } else {
+    this.rotate(this.PI + this.atan(y / x));
+  }
 
-    let arrowSize = 7;
-    this.translate(this.dist(0, 0, x, y) - arrowSize, 0);
-    this.triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
+  let arrowSize = 7;
+  this.translate(this.dist(0, 0, x, y) - arrowSize, 0);
+  this.triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
 
-    this.pop();
+  this.pop();
 };
 
 /**
@@ -327,29 +333,29 @@ p5.prototype.arrow = function (tailX, tailY, headX, headY) {
  * @param {p5.Color} clr the color to render the planes oriented along each axis
  */
 p5.prototype.draw3DAxes = function (size, clr = "violet") {
-    const _clr = this.color(clr);
-    this.push();
+  const _clr = this.color(clr);
+  this.push();
 
-    const sz = size / 30;
-    this.stroke(255);
-    this.fill(_clr);
-    this.drawXAxis(size, sz);
-    this.drawYAxis(size, sz);
-    this.drawZAxis(size, sz);
+  const sz = size / 30;
+  this.stroke(255);
+  this.fill(_clr);
+  this.drawXAxis(size, sz);
+  this.drawYAxis(size, sz);
+  this.drawZAxis(size, sz);
 
-    this.stroke(_clr);
-    this.drawOrigin(sz);
+  this.stroke(_clr);
+  this.drawOrigin(sz);
 
-    const planeSize = 2 * (size + sz);
-    _clr.setAlpha(35);
-    this.fill(_clr);
-    this.noStroke();
-    this.plane(planeSize, planeSize);
-    this.rotateX(90);
-    this.plane(planeSize, planeSize);
-    this.rotateY(90);
-    this.plane(planeSize, planeSize);
-    this.pop();
+  const planeSize = 2 * (size + sz);
+  _clr.setAlpha(35);
+  this.fill(_clr);
+  this.noStroke();
+  this.plane(planeSize, planeSize);
+  this.rotateX(90);
+  this.plane(planeSize, planeSize);
+  this.rotateY(90);
+  this.plane(planeSize, planeSize);
+  this.pop();
 };
 
 /**
@@ -358,7 +364,7 @@ p5.prototype.draw3DAxes = function (size, clr = "violet") {
  * @param {Number} size the size of the origin (sphere) in 3D
  */
 p5.prototype.drawOrigin = function (size) {
-    this.sphere(size);
+  this.sphere(size);
 };
 
 /**
@@ -368,13 +374,13 @@ p5.prototype.drawOrigin = function (size) {
  * @param {Number} arrowSize  the size of the arrow (cone)
  */
 p5.prototype.drawZAxis = function (length, arrowSize) {
-    this.line(0, 0, 0, 0, 0, length);
-    this.push();
-    this.translate(0, 0, length);
-    this.rotateX(90);
-    this.noStroke();
-    this.cone(arrowSize, 2 * arrowSize);
-    this.pop();
+  this.line(0, 0, 0, 0, 0, length);
+  this.push();
+  this.translate(0, 0, length);
+  this.rotateX(90);
+  this.noStroke();
+  this.cone(arrowSize, 2 * arrowSize);
+  this.pop();
 };
 
 /**
@@ -384,12 +390,12 @@ p5.prototype.drawZAxis = function (length, arrowSize) {
  * @param {Number} arrowSize  the size of the arrow (cone)
  */
 p5.prototype.drawYAxis = function (length, arrowSize) {
-    this.line(0, 0, 0, 0, length, 0);
-    this.push();
-    this.translate(0, length, 0);
-    this.noStroke();
-    this.cone(arrowSize, 2 * arrowSize);
-    this.pop();
+  this.line(0, 0, 0, 0, length, 0);
+  this.push();
+  this.translate(0, length, 0);
+  this.noStroke();
+  this.cone(arrowSize, 2 * arrowSize);
+  this.pop();
 };
 
 /**
@@ -399,13 +405,13 @@ p5.prototype.drawYAxis = function (length, arrowSize) {
  * @param {Number} arrowSize  the size of the arrow (cone)
  */
 p5.prototype.drawXAxis = function (length, arrowSize) {
-    this.line(0, 0, 0, length, 0, 0);
-    this.push();
-    this.translate(length, 0, 0);
-    this.rotateZ(-90);
-    this.noStroke();
-    this.cone(arrowSize, 2 * arrowSize);
-    this.pop();
+  this.line(0, 0, 0, length, 0, 0);
+  this.push();
+  this.translate(length, 0, 0);
+  this.rotateZ(-90);
+  this.noStroke();
+  this.cone(arrowSize, 2 * arrowSize);
+  this.pop();
 };
 
 /**
@@ -415,19 +421,19 @@ p5.prototype.drawXAxis = function (length, arrowSize) {
  * @param {boolean or list} dash False by default. Otherwise, it makes a dashed line with the sequence specified by a list
  */
 p5.prototype.drawVector = function (O_x, O_y, V, dash = false) {
-    // assume parameters are vectors
-    push()
-    if (dash != false) {
-        drawingContext.setLineDash(dash);
-    }
-    line(O_x, O_y, O_x + V.x, O_y + V.y);
-    noStroke();
-    translate(O_x, O_y);
-    rotate(V.heading());
-    translate(V.mag() - 10, 0);
-    triangle(0, 5, 0, -5, 10, 0);
-    pop();
-}
+  // assume parameters are vectors
+  push();
+  if (dash != false) {
+    drawingContext.setLineDash(dash);
+  }
+  line(O_x, O_y, O_x + V.x, O_y + V.y);
+  noStroke();
+  translate(O_x, O_y);
+  rotate(V.heading());
+  translate(V.mag() - 10, 0);
+  triangle(0, 5, 0, -5, 10, 0);
+  pop();
+};
 
 /**
  * Keeps track of the mouse's current position taking transformations
@@ -436,21 +442,21 @@ p5.prototype.drawVector = function (O_x, O_y, V, dash = false) {
  * @returns {Object} containing the mouse's x and y-coordinates
  */
 p5.prototype.mouse = function () {
-    const transform_matrix = this.drawingContext.getTransform();
+  const transform_matrix = this.drawingContext.getTransform();
 
-    const m = {
-        x: this.mouseX - transform_matrix.e,
-        y: this.mouseY - transform_matrix.f,
-    }
+  const m = {
+    x: this.mouseX - transform_matrix.e,
+    y: this.mouseY - transform_matrix.f,
+  };
 
-    if (this._coordinateMode === this.BOTTOM_LEFT)
-        m.y = this.height - this.mouseY - transform_matrix.f;
+  if (this._coordinateMode === this.BOTTOM_LEFT)
+    m.y = this.height - this.mouseY - transform_matrix.f;
 
-    const tm = {
-        x: m.x * transform_matrix.a + m.y * transform_matrix.b,
-        y: m.x * transform_matrix.c + m.y * transform_matrix.d
-    }
-    return tm;
+  const tm = {
+    x: m.x * transform_matrix.a + m.y * transform_matrix.b,
+    y: m.x * transform_matrix.c + m.y * transform_matrix.d,
+  };
+  return tm;
 };
 
 // Boolean flag that indicates whether any MovableCircles are moving.
@@ -461,62 +467,62 @@ p5.prototype._anyMoving = false;
  * their mouse.
  */
 class MovableCircle {
-    constructor(pInst, x, y, d, clr = "red") {
-        this.pInst = pInst;
-        this.x = x;
-        this.y = y;
-        this.d = d;
-        this.clr = clr;
-        this.isMovable = false;
-        this.pInst._renderer.elt.addEventListener("mouseup", () => {
-            this.pInst._anyMoving = false;
-            this.isMovable = false;
-        });
-        this.locked = {x: "free", y: "free"};
-    }
+  constructor(pInst, x, y, d, clr = "red") {
+    this.pInst = pInst;
+    this.x = x;
+    this.y = y;
+    this.d = d;
+    this.clr = clr;
+    this.isMovable = false;
+    this.pInst._renderer.elt.addEventListener("mouseup", () => {
+      this.pInst._anyMoving = false;
+      this.isMovable = false;
+    });
+    this.locked = { x: "free", y: "free" };
+  }
 
-    draw() {
-        this.pInst.push();
-        if (this.isMouseHovering() || this.isMovable) {
-            this.pInst.fill(this.clr);
-        }
-        if (this.isMovable) {
-            if (this.locked.x === "free") {
-                this.x = this.pInst.mouse().x;
-            }
-
-            if (this.locked.y === "free") {
-                this.y = this.pInst.mouse().y;
-            }
-        }
-        this.pInst.circle(this.x, this.y, this.d);
-        this.makeMovable();
-        this.pInst.pop();
+  draw() {
+    this.pInst.push();
+    if (this.isMouseHovering() || this.isMovable) {
+      this.pInst.fill(this.clr);
     }
+    if (this.isMovable) {
+      if (this.locked.x === "free") {
+        this.x = this.pInst.mouse().x;
+      }
 
-    isMouseHovering() {
-        const m = this.pInst.mouse();
-        return this.pInst.dist(m.x, m.y, this.x, this.y) < this.d / 2;
+      if (this.locked.y === "free") {
+        this.y = this.pInst.mouse().y;
+      }
     }
+    this.pInst.circle(this.x, this.y, this.d);
+    this.makeMovable();
+    this.pInst.pop();
+  }
 
-    makeMovable() {
-        if (this.isMouseHovering() && !this.pInst._anyMoving) {
-            if (this.pInst.mouseIsPressed) {
-                this.pInst._anyMoving = true;
-                this.isMovable = true;
-            }
-        }
-    }
+  isMouseHovering() {
+    const m = this.pInst.mouse();
+    return this.pInst.dist(m.x, m.y, this.x, this.y) < this.d / 2;
+  }
 
-    lock(coordinate, value) {
-        if (coordinate === "x") {
-            this.locked.x = value;
-            this.x = value;
-        } else if (coordinate === "y") {
-            this.locked.y = value;
-            this.y = value;
-        }
+  makeMovable() {
+    if (this.isMouseHovering() && !this.pInst._anyMoving) {
+      if (this.pInst.mouseIsPressed) {
+        this.pInst._anyMoving = true;
+        this.isMovable = true;
+      }
     }
+  }
+
+  lock(coordinate, value) {
+    if (coordinate === "x") {
+      this.locked.x = value;
+      this.x = value;
+    } else if (coordinate === "y") {
+      this.locked.y = value;
+      this.y = value;
+    }
+  }
 }
 
 /**
@@ -529,7 +535,7 @@ class MovableCircle {
  * @returns
  */
 p5.prototype.createMovableCircle = function (x, y, d, clr = "red") {
-    return new MovableCircle(this, x, y, d, clr);
+  return new MovableCircle(this, x, y, d, clr);
 };
 
 /**
@@ -538,7 +544,7 @@ p5.prototype.createMovableCircle = function (x, y, d, clr = "red") {
  * @returns {Number} the time
  */
 p5.prototype.unixTime = function () {
-    return Math.round(Date.now() / 1000);
+  return Math.round(Date.now() / 1000);
 };
 
 /**
@@ -550,29 +556,29 @@ p5.prototype.unixTime = function () {
  * @param {String} prefix         the prefix used for files containing sketches (Optional)
  */
 p5.prototype.createManager = function (
-    numMilestones,
-    path = "milestones",
-    prefix = "m"
+  numMilestones,
+  path = "milestones",
+  prefix = "m"
 ) {
-    document.addEventListener("keypress", function (event) {
-        for (let i = 0; i < numMilestones; i += 1) {
-            if (event.keyCode === 49 + i) {
-                const pre = document.getElementById("output");
-                if (!pre === null) {
-                    pre.remove();
-                }
-
-                const div = document.getElementById("sketch-holder");
-                if (!div === null) {
-                    div.remove();
-                }
-
-                const filename = `${path}/${prefix}${i + 1}.py`;
-                runCode(filename);
-                break;
-            }
+  document.addEventListener("keypress", function (event) {
+    for (let i = 0; i < numMilestones; i += 1) {
+      if (event.keyCode === 49 + i) {
+        const pre = document.getElementById("output");
+        if (!pre === null) {
+          pre.remove();
         }
-    });
+
+        const div = document.getElementById("sketch-holder");
+        if (!div === null) {
+          div.remove();
+        }
+
+        const filename = `${path}/${prefix}${i + 1}.py`;
+        runCode(filename);
+        break;
+      }
+    }
+  });
 };
 
 /**
@@ -585,51 +591,51 @@ p5.prototype.createManager = function (
  * @param {p5.Color} secondary  the die's secondary (circle) color (Optional)
  */
 p5.prototype.die = function (
-    roll,
-    x,
-    y,
-    primary = "white",
-    secondary = "black"
+  roll,
+  x,
+  y,
+  primary = "white",
+  secondary = "black"
 ) {
-    if ([1, 2, 3, 4, 5, 6].indexOf(roll) < 0) {
-        throw new p5Error("roll must be an integer from 1 to 6");
-    }
-    let s = 15;
-    this.push();
-    this.fill(primary);
-    this.noStroke();
-    this.rectMode(this.CENTER);
-    this.square(x, y, 4 * s, 6);
-    this.fill(secondary);
-    if (roll === 1) {
-        this.circle(x, y, s);
-    } else if (roll === 2) {
-        this.circle(x + s, y - s, s);
-        this.circle(x - s, y + s, s);
-    } else if (roll === 3) {
-        this.circle(x, y, s);
-        this.circle(x + s, y - s, s);
-        this.circle(x - s, y + s, s);
-    } else if (roll === 4) {
-        this.circle(x + s, y - s, s);
-        this.circle(x - s, y + s, s);
-        this.circle(x + s, y + s, s);
-        this.circle(x - s, y - s, s);
-    } else if (roll === 5) {
-        this.circle(x, y, s);
-        this.circle(x + s, y - s, s);
-        this.circle(x - s, y + s, s);
-        this.circle(x + s, y + s, s);
-        this.circle(x - s, y - s, s);
-    } else {
-        this.circle(x + s, y - (s * 6) / 5, s);
-        this.circle(x - s, y + (s * 6) / 5, s);
-        this.circle(x + s, y + (s * 6) / 5, s);
-        this.circle(x - s, y - (s * 6) / 5, s);
-        this.circle(x - s, y, s);
-        this.circle(x + s, y, s);
-    }
-    this.pop();
+  if ([1, 2, 3, 4, 5, 6].indexOf(roll) < 0) {
+    throw new p5Error("roll must be an integer from 1 to 6");
+  }
+  let s = 15;
+  this.push();
+  this.fill(primary);
+  this.noStroke();
+  this.rectMode(this.CENTER);
+  this.square(x, y, 4 * s, 6);
+  this.fill(secondary);
+  if (roll === 1) {
+    this.circle(x, y, s);
+  } else if (roll === 2) {
+    this.circle(x + s, y - s, s);
+    this.circle(x - s, y + s, s);
+  } else if (roll === 3) {
+    this.circle(x, y, s);
+    this.circle(x + s, y - s, s);
+    this.circle(x - s, y + s, s);
+  } else if (roll === 4) {
+    this.circle(x + s, y - s, s);
+    this.circle(x - s, y + s, s);
+    this.circle(x + s, y + s, s);
+    this.circle(x - s, y - s, s);
+  } else if (roll === 5) {
+    this.circle(x, y, s);
+    this.circle(x + s, y - s, s);
+    this.circle(x - s, y + s, s);
+    this.circle(x + s, y + s, s);
+    this.circle(x - s, y - s, s);
+  } else {
+    this.circle(x + s, y - (s * 6) / 5, s);
+    this.circle(x - s, y + (s * 6) / 5, s);
+    this.circle(x + s, y + (s * 6) / 5, s);
+    this.circle(x - s, y - (s * 6) / 5, s);
+    this.circle(x - s, y, s);
+    this.circle(x + s, y, s);
+  }
+  this.pop();
 };
 
 /**
@@ -642,62 +648,62 @@ p5.prototype.die = function (
  * @param {Number} barScale the scale factor from data values to bar height (Optional)
  */
 p5.prototype.drawBarGraph = function (data, labels, width, height, barScale) {
-    const transform_matrix = this.drawingContext.getTransform();
-    const ox = transform_matrix.e;
-    const oy = transform_matrix.f;
-    let _width;
-    if (!width) {
-        _width = this.width - ox - 16;
+  const transform_matrix = this.drawingContext.getTransform();
+  const ox = transform_matrix.e;
+  const oy = transform_matrix.f;
+  let _width;
+  if (!width) {
+    _width = this.width - ox - 16;
+  } else {
+    _width = width;
+  }
+  let _height;
+  if (!height) {
+    _height = this.height - (this.height - oy) - 16;
+  } else {
+    _height = height;
+  }
+  let barWidth = (_width - 2) / (2 * data.length);
+  this.push();
+  this.textAlign(this.CENTER, this.CENTER);
+  // Axes
+  this.push();
+  this.noFill();
+  this.line(0, 0, _width, 0);
+  this.triangle(_width, 10, _width, -10, _width + 15, 0);
+  this.line(0, 0, 0, _height);
+  this.triangle(-10, _height, 10, _height, 0, _height + 15);
+  this.pop();
+  // Labels
+  this.noStroke();
+  // FIXME: this is a hack
+  if (this.frameCount > 1) {
+    if (labels) {
+      for (let i = 0; i < data.length; i += 1) {
+        let x = barWidth + 2 * i * barWidth;
+        this.text(labels[i], x, -this.textSize());
+      }
     } else {
-        _width = width;
+      for (let i = 0; i < data.length; i += 1) {
+        let x = barWidth + 2 * i * barWidth;
+        this.text(i + 1, x, -this.textSize());
+      }
     }
-    let _height;
-    if (!height) {
-        _height = this.height - (this.height - oy) - 16;
-    } else {
-        _height = height;
-    }
-    let barWidth = (_width - 2) / (2 * data.length);
-    this.push();
-    this.textAlign(this.CENTER, this.CENTER);
-    // Axes
-    this.push();
-    this.noFill();
-    this.line(0, 0, _width, 0);
-    this.triangle(_width, 10, _width, -10, _width + 15, 0);
-    this.line(0, 0, 0, _height);
-    this.triangle(-10, _height, 10, _height, 0, _height + 15);
-    this.pop();
-    // Labels
-    this.noStroke();
-    // FIXME: this is a hack
-    if (this.frameCount > 1) {
-        if (labels) {
-            for (let i = 0; i < data.length; i += 1) {
-                let x = barWidth + 2 * i * barWidth;
-                this.text(labels[i], x, -this.textSize());
-            }
-        } else {
-            for (let i = 0; i < data.length; i += 1) {
-                let x = barWidth + 2 * i * barWidth;
-                this.text(i + 1, x, -this.textSize());
-            }
-        }
-    }
-    // Bars
-    this.push();
-    this.noStroke();
-    let _barScale;
-    if (!barScale) {
-        _barScale = 5;
-    } else {
-        _barScale = barScale;
-    }
-    for (let i = 0; i < data.length; i += 1) {
-        let x = 2 * i * barWidth + 1;
-        this.rect(x, 1, 2 * barWidth, data[i] * _barScale);
-    }
-    this.pop();
+  }
+  // Bars
+  this.push();
+  this.noStroke();
+  let _barScale;
+  if (!barScale) {
+    _barScale = 5;
+  } else {
+    _barScale = barScale;
+  }
+  for (let i = 0; i < data.length; i += 1) {
+    let x = 2 * i * barWidth + 1;
+    this.rect(x, 1, 2 * barWidth, data[i] * _barScale);
+  }
+  this.pop();
 };
 
 // ====================================
@@ -717,14 +723,14 @@ p5.prototype.drawBarGraph = function (data, labels, width, height, barScale) {
  * @returns
  */
 p5.prototype.linmap = function (
-    value,
-    start1,
-    stop1,
-    start2,
-    stop2,
-    withinBounds
+  value,
+  start1,
+  stop1,
+  start2,
+  stop2,
+  withinBounds
 ) {
-    return this.map(value, start1, stop1, start2, stop2, withinBounds);
+  return this.map(value, start1, stop1, start2, stop2, withinBounds);
 };
 
 /**
@@ -733,8 +739,8 @@ p5.prototype.linmap = function (
  * @param {String} message the error message to display
  */
 function p5Error(message = "") {
-    this.name = "🌸 p5.js says";
-    this.message = message;
+  this.name = "🌸 p5.js says";
+  this.message = message;
 }
 
 p5Error.prototype = Error.prototype;
@@ -757,7 +763,7 @@ p5.prototype._assetsRemaining = 0;
  * @returns {Boolean} whether all assets have loaded
  */
 p5.prototype.assetsLoaded = function () {
-    return this._preloadCount + this._assetsRemaining === 0;
+  return this._preloadCount + this._assetsRemaining === 0;
 };
 
 // Alias for the loadSound() function
@@ -771,9 +777,9 @@ p5.prototype._loadSound = p5.prototype.loadSound;
  * @param {String} name the name of the sound file's key in the assets Object
  */
 p5.prototype.loadSound = function (path, name) {
-    this._assetsRemaining += 1;
-    this.assets[name] = this._loadSound(path, () => this._assetsRemaining--);
-    return this.assets[name];
+  this._assetsRemaining += 1;
+  this.assets[name] = this._loadSound(path, () => this._assetsRemaining--);
+  return this.assets[name];
 };
 
 // Alias for the loadImage() function
@@ -787,9 +793,9 @@ p5.prototype._loadImage = p5.prototype.loadImage;
  * @param {String} name the name of the image file's key in the assets Object
  */
 p5.prototype.loadImage = function (path, name) {
-    this._assetsRemaining += 1;
-    this.assets[name] = this._loadImage(path, () => this._assetsRemaining--);
-    return this.assets[name];
+  this._assetsRemaining += 1;
+  this.assets[name] = this._loadImage(path, () => this._assetsRemaining--);
+  return this.assets[name];
 };
 
 // Alias for the loadFont() function
@@ -803,14 +809,14 @@ p5.prototype._loadFont = p5.prototype.loadFont;
  * @param {String} name the name of the font file's key in the assets Object
  */
 p5.prototype.loadFont = function (path, name) {
-    this._assetsRemaining += 1;
-    let _path = path;
-    if (path === "Press Start 2P") {
-        _path =
-            "https://cdn.jsdelivr.net/gh/StriveMath/fonts/Press_Start_2P/PressStart2P-Regular.ttf";
-    }
-    this.assets[name] = this._loadFont(_path, () => this._assetsRemaining--);
-    return this.assets[name];
+  this._assetsRemaining += 1;
+  let _path = path;
+  if (path === "Press Start 2P") {
+    _path =
+      "https://cdn.jsdelivr.net/gh/StriveMath/fonts/Press_Start_2P/PressStart2P-Regular.ttf";
+  }
+  this.assets[name] = this._loadFont(_path, () => this._assetsRemaining--);
+  return this.assets[name];
 };
 
 /**
@@ -820,20 +826,20 @@ p5.prototype.loadFont = function (path, name) {
  *  @param {Number} thickness the thickness of the crosshair
  */
 p5.prototype.crosshair = function (color = "white", thickness = 1) {
-    let x = this.mouseX;
-    let y = this.mouseY;
+  let x = this.mouseX;
+  let y = this.mouseY;
 
-    this.push();
-    this.cursor("NONE");
-    this.fill(color);
-    this.stroke(color);
-    this.strokeWeight(thickness);
-    this.line(0, y, this.width, y);
-    this.text(`x: ${x} y:${y}`, x + 16, y + 16)
-    this.line(x, 0, x, this.height);
-    this.strokeWeight(thickness * 3);
-    this.stroke("red");
-    this.line(x - 10, y, x + 10, y);
-    this.line(x, y - 10, x, y + 10);
-    this.pop();
-}
+  this.push();
+  this.cursor("NONE");
+  this.fill(color);
+  this.stroke(color);
+  this.strokeWeight(thickness);
+  this.line(0, y, this.width, y);
+  this.text(`x: ${x} y:${y}`, x + 16, y + 16);
+  this.line(x, 0, x, this.height);
+  this.strokeWeight(thickness * 3);
+  this.stroke("red");
+  this.line(x - 10, y, x + 10, y);
+  this.line(x, y - 10, x, y + 10);
+  this.pop();
+};
