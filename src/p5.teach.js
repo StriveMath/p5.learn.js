@@ -36,7 +36,7 @@ p5.prototype.BOTTOM_LEFT = "bottom-left";
 // Set the default angleMode to degrees.
 p5.prototype._angleMode = p5.prototype.DEGREES;
 // Set the default coordinateMode to top-left.
-p5.prototype._coordinateMode = p5.prototype.TOP_LEFT;
+p5.prototype._coordinateMode = p5.prototype.BOTTOM_LEFT;
 
 /**
  * Sets the coordinate system mode to either top-left or bottom-left
