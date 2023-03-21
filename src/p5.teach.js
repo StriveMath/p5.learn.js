@@ -98,8 +98,9 @@ p5.prototype.registerMethod("pre", function () {
 
 p5.prototype._createCanvas = p5.prototype.createCanvas;
 p5.prototype.createCanvas = function () {
-  this._createCanvas(...arguments);
+  const res = this._createCanvas(...arguments);
   this._applyCoordinateModeBeforeDraw();
+  return res;
 };
 
 p5.prototype._text = p5.prototype.text;
@@ -143,16 +144,6 @@ p5.prototype.image = function (
     this._setCoordinateModeBottomLeft();
   } else {
     this._image(...arguments);
-  }
-};
-
-p5.Element.prototype._position = p5.Element.prototype.position;
-p5.Element.prototype.position = function () {
-  if (this._coordinateMode === this.BOTTOM_LEFT) {
-    arguments[1] = this._pInst.height - arguments[1];
-    this._position(...arguments);
-  } else {
-    this._position(...arguments);
   }
 };
 
