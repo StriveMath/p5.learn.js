@@ -775,6 +775,8 @@ function createConfetti(pInst, amount) {
  * Populate confetti array and display confetti on screen. When confetti reaches bottom of screen recreate it.
  */
 p5.prototype.celebrate = function celebrate() {
+  // save current coordinate mode
+  const currentCoordMode = this._coordinateMode;
   this.coordinateMode(this.TOP_LEFT);
   // check if confetti array is empty. if so create confetti.
   if (confetti.length === 0) {
@@ -806,7 +808,8 @@ p5.prototype.celebrate = function celebrate() {
       );
     }
   }
-  this.coordinateMode(this.BOTTOM_LEFT);
+  // load coordinate mode
+  this.coordinateMode(currentCoordMode);
 };
 
 // ====================================
