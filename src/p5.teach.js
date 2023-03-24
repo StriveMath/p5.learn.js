@@ -172,6 +172,39 @@ p5.prototype.redraw = function () {
   this._redraw(...arguments);
 };
 
+//function to convert degrees to radians
+p5.prototype.radians = function (degrees) {
+  return (degrees % 360) * (Math.PI / 180);
+};
+
+/**
+ * Draws a star of a specified size at x and y
+ *
+ * @param {*} x   the x-coordinate of the star
+ * @param {*} y   the y-coordinate of the star
+ * @param {*} size size of the star vertexes
+ */
+p5.prototype.star = function (x, y, size) {
+  this.angleMode(this.RADIANS);
+  this.push();
+  this.translate(x, y);
+  this.rotate(Math.PI / 5);
+  let angle = -90;
+  this.beginShape();
+  for (let i = 0; i < 5; i++) {
+    x = (Math.cos(this.radians(angle)) * size) / 2;
+    y = (Math.sin(this.radians(angle)) * size) / 2;
+    this.vertex(x, y);
+    angle += 36;
+    x = (Math.cos(this.radians(angle)) * size) / 6;
+    y = (Math.sin(this.radians(angle)) * size) / 6;
+    this.vertex(x, y);
+    angle += 36;
+  }
+  this.endShape();
+  this.pop();
+};
+
 p5.prototype.bounce = function (minNum, maxNum, speed) {
   const amp = maxNum - minNum;
   return Math.abs(((this.frameCount * speed) % (2 * amp)) - amp) + minNum;
