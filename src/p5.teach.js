@@ -697,6 +697,118 @@ p5.prototype.drawBarGraph = function (data, labels, width, height, barScale) {
   this.pop();
 };
 
+/**
+ * A class to define a single piece of confetti for the celebrate function
+ */
+class Confetti {
+  constructor(pInst, _x, _y, _s) {
+    this.pInst = pInst;
+    let confettiColor = [
+      this.pInst.color("#00aeef"),
+      this.pInst.color("#ec008c"),
+      this.pInst.color("#72c8b6"),
+      this.pInst.color("#e6dd6a"),
+      this.pInst.color("#8641bf"),
+      this.pInst.color("#42d4be"),
+    ];
+    this.x = _x;
+    this.y = _y;
+    this.speed = _s;
+    this.time = this.pInst.random(0, 100);
+    this.color = this.pInst.random(confettiColor);
+    this.amp = this.pInst.random(2, 30);
+    this.phase = this.pInst.random(0.5, 2);
+    this.size = this.pInst.random(
+      this.pInst.width / 25,
+      this.pInst.height / 50
+    );
+    this.form = this.pInst.round(this.pInst.random(0, 1));
+  }
+
+  confettiDisplay() {
+    this.pInst.fill(this.color);
+    // blendMode(SCREEN);
+    this.pInst.noStroke();
+    this.pInst.push();
+    this.pInst.translate(this.x, this.y);
+    this.pInst.translate(
+      this.amp * Math.sin(this.time * this.phase),
+      this.speed * Math.cos(2 * this.time * this.phase)
+    );
+    this.pInst.rotate(this.time);
+    this.pInst.rectMode(this.pInst.CENTER);
+    this.pInst.scale(Math.cos(this.time / 4), Math.sin(this.time / 4));
+    if (this.form === 0) {
+      this.pInst.rect(0, 0, this.size, this.size / 2);
+    } else {
+      this.pInst.ellipse(0, 0, this.size);
+    }
+    this.pInst.pop();
+
+    this.time = this.time + 0.1;
+
+    this.speed += 8 / 200;
+
+    this.y += this.speed;
+  }
+}
+
+/**
+ * Populates confetti array with pieces specified by amount
+ *
+ * @param {Object} pInst    p5 instance
+ * @param {Number} amount   the amount of confetti pieces to create
+ */
+let confetti = [];
+function createConfetti(pInst, amount) {
+  for (let i = 0; i < amount; i++) {
+    confetti[i] = new Confetti(
+      pInst,
+      pInst.random(0, pInst.width),
+      pInst.random(-pInst.height, 0),
+      pInst.random(-1, 1)
+    );
+  }
+}
+
+/**
+ * Populate confetti array and display confetti on screen. When confetti reaches bottom of screen recreate it.
+ */
+p5.prototype.celebrate = function celebrate() {
+  this.coordinateMode(this.TOP_LEFT);
+  // check if confetti array is empty. if so create confetti.
+  if (confetti.length === 0) {
+    createConfetti(this, 100);
+  }
+  //let go half of the confetti
+  for (let i = 0; i < confetti.length / 2; i++) {
+    confetti[i].confettiDisplay();
+
+    if (confetti[i].y > this.height) {
+      confetti[i] = new Confetti(
+        this,
+        this.random(0, this.width),
+        this.random(-this.height, 0),
+        this.random(-1, 1)
+      );
+    }
+  }
+  // let go of other half
+  for (let i = Math.round(confetti.length / 2); i < confetti.length; i++) {
+    confetti[i].confettiDisplay();
+
+    if (confetti[i].y > this.height) {
+      confetti[i] = new Confetti(
+        this,
+        this.random(0, this.width),
+        this.random(-this.height, 0),
+        this.random(-1, 1)
+      );
+    }
+  }
+  this.coordinateMode(this.BOTTOM_LEFT);
+};
+
 // ====================================
 // Python Compatibility
 // ====================================
