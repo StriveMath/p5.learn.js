@@ -173,15 +173,15 @@ p5.prototype.redraw = function () {
 };
 
 p5.prototype.bounce = function (minNum, maxNum, speed) {
-  const amp = maxNum - minNum;
-  return Math.abs(((this.frameCount * speed) % (2 * amp)) - amp) + minNum;
+  const range = Math.abs(maxNum - minNum);
+  const v = (this.frameCount * speed) / range / 2;
+  return this.map(1 - Math.abs(1 - this.fract(v) * 2), 0, 1, minNum, maxNum);
 };
 
 p5.prototype.wave = function (minNum, maxNum, speed) {
-  const range = maxNum - minNum;
-  const a = (1 / 2) * (maxNum - minNum);
-  const b = (1 / 2) * (maxNum + minNum);
-  return a * Math.sin(((this.frameCount * speed) / range + 0.5) * Math.PI) + b;
+  const range = Math.abs(maxNum - minNum);
+  const v = (this.frameCount * speed) / range / 2;
+  return this.map(-Math.cos(v * this.TAU), -1, 1, minNum, maxNum);
 };
 
 /**x
