@@ -834,3 +834,13 @@ p5.prototype.crosshair = function (color = "white", thickness = 1) {
   this.line(x, y - 10, x, y + 10);
   this.pop();
 };
+
+p5.Element.prototype._position = p5.Element.prototype.position;
+p5.Element.prototype.position = function () {
+  if (this._pInst._coordinateMode === this._pInst.BOTTOM_LEFT) {
+    arguments[1] = this._pInst.height - arguments[1];
+    this._position(...arguments);
+  } else {
+    this._position(...arguments);
+  }
+};
