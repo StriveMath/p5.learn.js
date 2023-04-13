@@ -222,9 +222,13 @@ p5.prototype.wave = function (minNum, maxNum, speed) {
  * @param {*} y   the y-coordinate of the text
  */
 p5.prototype.responsiveText = function (val, x, y) {
-  const transform_matrix = this.drawingContext.getTransform();
-  const xScale = Math.sign(transform_matrix.a);
-  const yScale = Math.sign(transform_matrix.d);
+  let xScale,
+    yScale = 1;
+  if (!this._renderer.isP3D) {
+    const transform_matrix = this.drawingContext.getTransform();
+    xScale = Math.sign(transform_matrix.a);
+    yScale = Math.sign(transform_matrix.d);
+  }
   this.push();
   this.scale(xScale, yScale);
   this._text(val, x, -y);
