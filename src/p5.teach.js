@@ -185,28 +185,21 @@ p5.prototype.radians = function (degrees) {
  * @param {*} size size of the star vertexes
  */
 p5.prototype.star = function (x, y, size) {
-  // save current angle mode configuration
-  const currentAngleMode = this.angleMode();
-  this.angleMode(this.RADIANS);
-  this.push();
-  this.translate(x, y);
-  this.rotate(Math.PI / 5);
-  let angle = -90;
+  let angle = this._coordinateMode === this.BOTTOM_LEFT ? 90 : -90;
   this.beginShape();
   for (let i = 0; i < 5; i++) {
-    x = (Math.cos(this.radians(angle)) * size) / 2;
-    y = (Math.sin(this.radians(angle)) * size) / 2;
-    this.vertex(x, y);
+    this.vertex(
+      x + (Math.cos(this.radians(angle)) * size) / 2,
+      y + (Math.sin(this.radians(angle)) * size) / 2
+    );
     angle += 36;
-    x = (Math.cos(this.radians(angle)) * size) / 6;
-    y = (Math.sin(this.radians(angle)) * size) / 6;
-    this.vertex(x, y);
+    this.vertex(
+      x + (Math.cos(this.radians(angle)) * size) / 6,
+      y + (Math.sin(this.radians(angle)) * size) / 6
+    );
     angle += 36;
   }
   this.endShape();
-  this.pop();
-  //restore angle mode
-  this.angleMode(currentAngleMode);
 };
 
 p5.prototype.bounce = function (minNum, maxNum, speed) {
