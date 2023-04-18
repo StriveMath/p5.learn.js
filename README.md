@@ -60,15 +60,15 @@ Draws x and y-axes with tick marks, labels, and gridlines ([example](https://git
 ## bounce()
 
 ```js
-bounce(minNum, maxNum, speed);
+bounce(maxNum, minNum, speed);
 ```
 
 Returns a number that moves up and down between maxNum and minNum with a given speed ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/signals/sketch.js)).
 
 | Argument | Description                     | Value  | Default |
 | -------- | ------------------------------- | ------ | ------- |
-| minNum   | minimum value                   | number | -       |
 | maxNum   | maximum value                   | number | -       |
+| minNum   | minimum value                   | number | -       |
 | speed    | speed at which the bounce moves | number | -       |
 
 ## wave()
