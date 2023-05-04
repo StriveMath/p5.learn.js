@@ -7,5 +7,5 @@ function setup(){
 function draw(){
     background("black")
     drawTickAxes()
-    crosshair()
+    crosshair("white",1, 20)
 }

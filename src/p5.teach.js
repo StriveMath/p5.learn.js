@@ -62,7 +62,7 @@ p5.prototype.coordinateMode = function(mode) {
 
 p5.prototype._setCoordinateModeTopLeft = function() {
   this._coordinateMode = this.TOP_LEFT;
-  if (this._renderer.isP3D) {
+  if (this._renderer?.isP3D) {
     // this.scale(1, -1);
   } else {
     this.scale(1, -1);
@@ -72,7 +72,7 @@ p5.prototype._setCoordinateModeTopLeft = function() {
 
 p5.prototype._setCoordinateModeBottomLeft = function() {
   this._coordinateMode = this.BOTTOM_LEFT;
-  if (this._renderer.isP3D) {
+  if (this._renderer?.isP3D) {
     // this.scale(1, -1);
   } else {
     this.translate(0, this.height);
@@ -149,7 +149,7 @@ p5.prototype.image = function(
 
 p5.prototype.__updateNextMouseCoords = p5.prototype._updateNextMouseCoords;
 p5.prototype._updateNextMouseCoords = function(evt) {
-  if (this._coordinateMode === this.BOTTOM_LEFT && !this._renderer.isP3D) {
+  if (this._coordinateMode === this.BOTTOM_LEFT && !this._renderer?.isP3D) {
     const _evt = new Proxy(evt, {
       get: (target, prop) => {
         if (prop === "clientY") return this.height - target[prop];
@@ -224,7 +224,7 @@ p5.prototype.wave = function(minNum, maxNum, speed) {
 p5.prototype.responsiveText = function(val, x, y) {
   let xScale,
     yScale = 1;
-  if (!this._renderer.isP3D) {
+  if (!this._renderer?.isP3D) {
     const transform_matrix = this.drawingContext.getTransform();
     xScale = Math.sign(transform_matrix.a);
     yScale = Math.sign(transform_matrix.d);
