@@ -7,4 +7,5 @@ def setup():
 def draw():
     background("black")
     drawTickAxes()
-    crosshair("white",1,20)
+    textSize(100)
+    crosshair("white",1)
