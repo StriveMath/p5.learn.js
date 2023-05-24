@@ -1,15 +1,15 @@
-# p5.teach.js
+# p5.learn.js
 
-p5.teach.js is a library for [p5.js](https://github.com/processing/p5.js) developed by [Strive](https://www.strivemath.com/) to aid in teaching coding. It extends p5.js with a bottom left coordinate mode mimicking the standard mathematical setup where coordinate (0,0) is in the bottom left and the y-axis moves upwards. It also adds functions for drawing tick axes, graphs, arrows and more.
+p5.learn.js is a library for [p5.js](https://github.com/processing/p5.js) developed by [Strive](https://www.strivemath.com/) to aid in teaching coding. It extends p5.js with a bottom left coordinate mode mimicking the standard mathematical setup where coordinate (0,0) is in the bottom left and the y-axis moves upwards. It also adds functions for drawing tick axes, graphs, arrows and more.
 
 # Usage
 
-Load [p5.teach.js](https://github.com/StriveMath/p5.teach.js/blob/main/src/p5.teach.js) in a script tag below p5.js inside index.html ([example](https://github.com/StriveMath/p5.teach.js/tree/main/examples/tickAxes))
+Load [p5.learn.js](https://github.com/StriveMath/p5.learn.js/blob/main/src/p5.learn.js) in a script tag below p5.js inside index.html ([example](https://github.com/StriveMath/p5.learn.js/tree/main/examples/tickAxes))
 
 ```html
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
-  <script src="https://cdn.jsdelivr.net/gh/StriveMath/p5.teach.js/src/p5.teach.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/StriveMath/p5.learn.js/src/p5.learn.js"></script>
 </head>
 ```
 
@@ -21,7 +21,7 @@ Load [p5.teach.js](https://github.com/StriveMath/p5.teach.js/blob/main/src/p5.te
 coordinateMode(mode);
 ```
 
-Sets the coordinate mode to TOP_LEFT or BOTTOM_LEFT. Coordinate mode is set to TOP_LEFT by default. BOTTOM_LEFT mode mimics the standard mathematical setup where coordinate (0,0) is in the bottom left and the y-axis moves upwards ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/tickAxes/sketch.js)).
+Sets the coordinate mode to TOP_LEFT or BOTTOM_LEFT. Coordinate mode is set to TOP_LEFT by default. BOTTOM_LEFT mode mimics the standard mathematical setup where coordinate (0,0) is in the bottom left and the y-axis moves upwards ([example](https://github.com/StriveMath/p5.learn.js/blob/main/examples/tickAxes/sketch.js)).
 
 | Argument | Description               | Value                   | Default |
 | -------- | ------------------------- | ----------------------- | ------- |
@@ -43,7 +43,7 @@ drawTickAxes(
 );
 ```
 
-Draws x and y-axes with tick marks, labels, and gridlines ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/tickAxes/sketch.js)).
+Draws x and y-axes with tick marks, labels, and gridlines ([example](https://github.com/StriveMath/p5.learn.js/blob/main/examples/tickAxes/sketch.js)).
 
 | Argument      | Description                                                                 | Value              | Default                 |
 | ------------- | --------------------------------------------------------------------------- | ------------------ | ----------------------- |
@@ -63,7 +63,7 @@ Draws x and y-axes with tick marks, labels, and gridlines ([example](https://git
 bounce(minNum, maxNum, speed);
 ```
 
-Returns a number that moves up and down between maxNum and minNum with a given speed ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/signals/sketch.js)).
+Returns a number that moves up and down between maxNum and minNum with a given speed ([example](https://github.com/StriveMath/p5.learn.js/blob/main/examples/signals/sketch.js)).
 
 | Argument | Description                     | Value  | Default |
 | -------- | ------------------------------- | ------ | ------- |
@@ -77,7 +77,7 @@ Returns a number that moves up and down between maxNum and minNum with a given s
 wave(minNum, maxNum, speed);
 ```
 
-Returns a number that waves up and down between maxNum and minNum with a given speed ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/signals/sketch.js)).
+Returns a number that waves up and down between maxNum and minNum with a given speed ([example](https://github.com/StriveMath/p5.learn.js/blob/main/examples/signals/sketch.js)).
 
 | Argument | Description                   | Value  | Default |
 | -------- | ----------------------------- | ------ | ------- |
@@ -129,7 +129,7 @@ draw() {
 }
 ```
 
-Creates a circle that users can drag about the canvas with their mouse ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/movablecircle/sketch.js)).
+Creates a circle that users can drag about the canvas with their mouse ([example](https://github.com/StriveMath/p5.learn.js/blob/main/examples/movablecircle/sketch.js)).
 
 | Argument | Description                          | Value              | Default |
 | -------- | ------------------------------------ | ------------------ | ------- |
@@ -173,7 +173,7 @@ Draws a single die that displays a number 1-6.
 drawBarGraph(data, [labels], [width], [height], [barScale]);
 ```
 
-Draws a simple bar graph given an Array of data ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/bargraph/sketch.js)).
+Draws a simple bar graph given an Array of data ([example](https://github.com/StriveMath/p5.learn.js/blob/main/examples/bargraph/sketch.js)).
 
 | Argument | Description                                     | Value    | Default     |
 | -------- | ----------------------------------------------- | -------- | ----------- |
@@ -189,7 +189,7 @@ Draws a simple bar graph given an Array of data ([example](https://github.com/St
 draw3DAxes(size, [clr]);
 ```
 
-Draws a set of x, y, and z-axes along with translucent planes ([example](https://github.com/StriveMath/p5.teach.js/blob/main/examples/3daxes/sketch.js)).
+Draws a set of x, y, and z-axes along with translucent planes ([example](https://github.com/StriveMath/p5.learn.js/blob/main/examples/3daxes/sketch.js)).
 
 | Argument | Description                                             | Value  | Default  |
 | -------- | ------------------------------------------------------- | ------ | -------- |
