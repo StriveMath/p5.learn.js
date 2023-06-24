@@ -1035,3 +1035,18 @@ p5.prototype.horizontalLine = function(y, start, stop){
   this.line(startX,y, endX,y)
   this.pop()
 }
+
+p5.prototype.table = function(label,value){
+  if(!document.body){
+    return
+  }
+  const d = document.getElementById(label)
+  if(d){
+    d.innerHTML = `${label}: ${value}`
+  }else{
+    const p = document.createElement("p")
+    p.id = label
+    p.innerHTML =  `${label}: ${value}`
+    document.body.appendChild(p)
+  }
+}
