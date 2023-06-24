@@ -1004,3 +1004,27 @@ p5.Element.prototype.position = function() {
     this._position(...arguments);
   }
 };
+
+
+p5.prototype.verticalLine = function(x, start, stop){
+  this.push()
+  const startY = start ? start: 0
+  const endY = stop? stop: this.height
+  // this.stroke("red")
+  // this.strokeWeight(10)
+
+  this.line(x,startY, x,endY)
+  this.pop()
+}
+
+
+p5.prototype.horizontalLine = function(y, start, stop){
+  this.push()
+  const startX = start ? start: 0
+  const endX = stop? stop: this.height
+  // this.stroke("red")
+  // this.strokeWeight(10)
+
+  this.line(startX,y, endX,y)
+  this.pop()
+}
