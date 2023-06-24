@@ -1006,25 +1006,32 @@ p5.Element.prototype.position = function() {
 };
 
 
+/**
+ *  Draws a vertical line at a given x co-ord between two y-cords
+ *
+ *  @param {Number} x the x-cord of the line
+ *  @param {Number} start the start y co-ord
+ *  @param {Number} stop the end y co-ord
+ */
 p5.prototype.verticalLine = function(x, start, stop){
   this.push()
   const startY = start ? start: 0
   const endY = stop? stop: this.height
-  // this.stroke("red")
-  // this.strokeWeight(10)
-
   this.line(x,startY, x,endY)
   this.pop()
 }
 
-
+/**
+ *  Draws a horizontal line at a given y co-ord between two x-cords
+ *
+ *  @param {Number} y the y-cord of the line
+ *  @param {Number} start the start x co-ord
+ *  @param {Number} stop the end x co-ord
+ */
 p5.prototype.horizontalLine = function(y, start, stop){
   this.push()
   const startX = start ? start: 0
   const endX = stop? stop: this.height
-  // this.stroke("red")
-  // this.strokeWeight(10)
-
   this.line(startX,y, endX,y)
   this.pop()
 }
