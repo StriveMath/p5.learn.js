@@ -918,6 +918,8 @@ p5.prototype._loadSound = p5.prototype.loadSound;
  * @param {String} name the name of the sound file's key in the assets Object
  */
 p5.prototype.loadSound = function (path, name) {
+  if (!this._loadSound) return;
+
   this._assetsRemaining += 1;
   this.assets[name] = this._loadSound(path, () => this._assetsRemaining--);
   return this.assets[name];
