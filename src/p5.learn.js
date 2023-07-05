@@ -43,7 +43,7 @@ p5.prototype._coordinateMode = p5.prototype.BOTTOM_LEFT;
  *
  * @param {Constant} mode either TOP_LEFT or BOTTOM_LEFT
  */
-p5.prototype.coordinateMode = function(mode) {
+p5.prototype.coordinateMode = function (mode) {
   if (mode === this._coordinateMode) return;
 
   switch (mode) {
@@ -55,12 +55,12 @@ p5.prototype.coordinateMode = function(mode) {
       break;
     default:
       throw new p5Error(
-        `coordinateMode() was expecting TOP_LEFT|BOTTOM_LEFT for the first parameter, received ${mode} instead`,
+        `coordinateMode() was expecting TOP_LEFT|BOTTOM_LEFT for the first parameter, received ${mode} instead`
       );
   }
 };
 
-p5.prototype._setCoordinateModeTopLeft = function() {
+p5.prototype._setCoordinateModeTopLeft = function () {
   this._coordinateMode = this.TOP_LEFT;
   if (this._renderer?.isP3D) {
     // this.scale(1, -1);
@@ -70,7 +70,7 @@ p5.prototype._setCoordinateModeTopLeft = function() {
   }
 };
 
-p5.prototype._setCoordinateModeBottomLeft = function() {
+p5.prototype._setCoordinateModeBottomLeft = function () {
   this._coordinateMode = this.BOTTOM_LEFT;
   if (this._renderer?.isP3D) {
     // this.scale(1, -1);
@@ -80,7 +80,7 @@ p5.prototype._setCoordinateModeBottomLeft = function() {
   }
 };
 
-p5.prototype._applyCoordinateModeBeforeDraw = function() {
+p5.prototype._applyCoordinateModeBeforeDraw = function () {
   switch (this._coordinateMode) {
     case this.BOTTOM_LEFT:
       this._setCoordinateModeBottomLeft();
@@ -88,7 +88,7 @@ p5.prototype._applyCoordinateModeBeforeDraw = function() {
   }
 };
 
-p5.prototype.registerMethod("pre", function() {
+p5.prototype.registerMethod("pre", function () {
   this._applyCoordinateModeBeforeDraw();
 });
 
@@ -97,14 +97,14 @@ p5.prototype.registerMethod("pre", function() {
 // ====================================
 
 p5.prototype._createCanvas = p5.prototype.createCanvas;
-p5.prototype.createCanvas = function() {
+p5.prototype.createCanvas = function () {
   const res = this._createCanvas(...arguments);
   this._applyCoordinateModeBeforeDraw();
   return res;
 };
 
 p5.prototype._text = p5.prototype.text;
-p5.prototype.text = function(str, x, y) {
+p5.prototype.text = function (str, x, y) {
   if (this._coordinateMode === this.BOTTOM_LEFT) {
     this.push();
     this.scale(1, -1);
@@ -116,7 +116,7 @@ p5.prototype.text = function(str, x, y) {
 };
 
 p5.prototype._image = p5.prototype.image;
-p5.prototype.image = function(
+p5.prototype.image = function (
   img,
   x,
   y,
@@ -125,7 +125,7 @@ p5.prototype.image = function(
   sx,
   sy,
   sWidth,
-  sHeight,
+  sHeight
 ) {
   if (this._coordinateMode === this.BOTTOM_LEFT) {
     this._setCoordinateModeTopLeft();
@@ -148,7 +148,7 @@ p5.prototype.image = function(
 };
 
 p5.prototype.__updateNextMouseCoords = p5.prototype._updateNextMouseCoords;
-p5.prototype._updateNextMouseCoords = function(evt) {
+p5.prototype._updateNextMouseCoords = function (evt) {
   if (this._coordinateMode === this.BOTTOM_LEFT && !this._renderer?.isP3D) {
     const _evt = new Proxy(evt, {
       get: (target, prop) => {
@@ -164,7 +164,7 @@ p5.prototype._updateNextMouseCoords = function(evt) {
 };
 
 p5.prototype._redraw = p5.prototype.redraw;
-p5.prototype.redraw = function() {
+p5.prototype.redraw = function () {
   if (!this.assetsLoaded()) {
     return;
   }
@@ -173,7 +173,7 @@ p5.prototype.redraw = function() {
 };
 
 //function to convert degrees to radians
-p5.prototype.radians = function(degrees) {
+p5.prototype.radians = function (degrees) {
   return (degrees % 360) * (Math.PI / 180);
 };
 
@@ -184,31 +184,31 @@ p5.prototype.radians = function(degrees) {
  * @param {*} y   the y-coordinate of the star
  * @param {*} size size of the star vertexes
  */
-p5.prototype.star = function(x, y, size) {
+p5.prototype.star = function (x, y, size) {
   let angle = this._coordinateMode === this.BOTTOM_LEFT ? 90 : -90;
   this.beginShape();
   for (let i = 0; i < 5; i++) {
     this.vertex(
       x + (Math.cos(this.radians(angle)) * size) / 2,
-      y + (Math.sin(this.radians(angle)) * size) / 2,
+      y + (Math.sin(this.radians(angle)) * size) / 2
     );
     angle += 36;
     this.vertex(
       x + (Math.cos(this.radians(angle)) * size) / 6,
-      y + (Math.sin(this.radians(angle)) * size) / 6,
+      y + (Math.sin(this.radians(angle)) * size) / 6
     );
     angle += 36;
   }
   this.endShape();
 };
 
-p5.prototype.bounce = function(minNum, maxNum, speed) {
+p5.prototype.bounce = function (minNum, maxNum, speed) {
   const range = Math.abs(maxNum - minNum);
   const v = (this.frameCount * speed) / range / 2;
   return this.map(1 - Math.abs(1 - this.fract(v) * 2), 0, 1, minNum, maxNum);
 };
 
-p5.prototype.wave = function(minNum, maxNum, speed) {
+p5.prototype.wave = function (minNum, maxNum, speed) {
   const range = Math.abs(maxNum - minNum);
   const v = (this.frameCount * speed) / range / 2;
   return this.map(-Math.cos(v * this.TAU), -1, 1, minNum, maxNum);
@@ -221,7 +221,7 @@ p5.prototype.wave = function(minNum, maxNum, speed) {
  * @param {*} x   the x-coordinate of the text
  * @param {*} y   the y-coordinate of the text
  */
-p5.prototype.responsiveText = function(val, x, y) {
+p5.prototype.responsiveText = function (val, x, y) {
   let xScale,
     yScale = 1;
   if (!this._renderer?.isP3D) {
@@ -249,7 +249,7 @@ p5.prototype.responsiveText = function(val, x, y) {
  * @param {Number} tickThickness  the thickness to draw the tick marks
  * @param {Number} gridThickness  the thickness to draw the gridlines
  */
-p5.prototype.drawTickAxes = function(
+p5.prototype.drawTickAxes = function (
   scaleFactor = 1,
   spacing = 50,
   axisColor = "rgb(20,45,217)",
@@ -258,7 +258,7 @@ p5.prototype.drawTickAxes = function(
   labelSize = 12,
   axisThickness = 5,
   tickThickness = 3,
-  gridThickness = 0.25,
+  gridThickness = 0.25
 ) {
   this.push();
   this.textSize(labelSize / scaleFactor);
@@ -329,7 +329,7 @@ p5.prototype.drawTickAxes = function(
  * @param {Number} headX the x-coordinate of the arrow's head
  * @param {Number} headY the y-coordinate of the arrow's head
  */
-p5.prototype.arrow = function(tailX, tailY, headX, headY) {
+p5.prototype.arrow = function (tailX, tailY, headX, headY) {
   let x = headX - tailX;
   let y = headY - tailY;
 
@@ -357,7 +357,7 @@ p5.prototype.arrow = function(tailX, tailY, headX, headY) {
  * @param {Number} size  the extent of the axes
  * @param {p5.Color} clr the color to render the planes oriented along each axis
  */
-p5.prototype.draw3DAxes = function(size, clr = "violet") {
+p5.prototype.draw3DAxes = function (size, clr = "violet") {
   const _clr = this.color(clr);
   this.push();
 
@@ -388,7 +388,7 @@ p5.prototype.draw3DAxes = function(size, clr = "violet") {
  *
  * @param {Number} size the size of the origin (sphere) in 3D
  */
-p5.prototype.drawOrigin = function(size) {
+p5.prototype.drawOrigin = function (size) {
   this.sphere(size);
 };
 
@@ -398,7 +398,7 @@ p5.prototype.drawOrigin = function(size) {
  * @param {Number} length     the length of the axis
  * @param {Number} arrowSize  the size of the arrow (cone)
  */
-p5.prototype.drawZAxis = function(length, arrowSize) {
+p5.prototype.drawZAxis = function (length, arrowSize) {
   this.line(0, 0, 0, 0, 0, length);
   this.push();
   this.translate(0, 0, length);
@@ -414,7 +414,7 @@ p5.prototype.drawZAxis = function(length, arrowSize) {
  * @param {Number} length     the length of the axis
  * @param {Number} arrowSize  the size of the arrow (cone)
  */
-p5.prototype.drawYAxis = function(length, arrowSize) {
+p5.prototype.drawYAxis = function (length, arrowSize) {
   this.line(0, 0, 0, 0, length, 0);
   this.push();
   this.translate(0, length, 0);
@@ -429,7 +429,7 @@ p5.prototype.drawYAxis = function(length, arrowSize) {
  * @param {Number} length     the length of the axis
  * @param {Number} arrowSize  the size of the arrow (cone)
  */
-p5.prototype.drawXAxis = function(length, arrowSize) {
+p5.prototype.drawXAxis = function (length, arrowSize) {
   this.line(0, 0, 0, length, 0, 0);
   this.push();
   this.translate(length, 0, 0);
@@ -445,7 +445,7 @@ p5.prototype.drawXAxis = function(length, arrowSize) {
  * @param {p5.Vector} V  the head of the vector
  * @param {boolean or list} dash False by default. Otherwise, it makes a dashed line with the sequence specified by a list
  */
-p5.prototype.drawVector = function(O_x, O_y, V, dash = false) {
+p5.prototype.drawVector = function (O_x, O_y, V, dash = false) {
   // assume parameters are vectors
   push();
   if (dash != false) {
@@ -466,7 +466,7 @@ p5.prototype.drawVector = function(O_x, O_y, V, dash = false) {
  *
  * @returns {Object} containing the mouse's x and y-coordinates
  */
-p5.prototype.mouse = function() {
+p5.prototype.mouse = function () {
   const transform_matrix = this.drawingContext.getTransform();
 
   const m = {
@@ -559,7 +559,7 @@ class MovableCircle {
  * @param {p5.Color} clr  the circle's color when hovered over (Optional)
  * @returns
  */
-p5.prototype.createMovableCircle = function(x, y, d, clr = "red") {
+p5.prototype.createMovableCircle = function (x, y, d, clr = "red") {
   return new MovableCircle(this, x, y, d, clr);
 };
 
@@ -568,7 +568,7 @@ p5.prototype.createMovableCircle = function(x, y, d, clr = "red") {
  *
  * @returns {Number} the time
  */
-p5.prototype.unixTime = function() {
+p5.prototype.unixTime = function () {
   return Math.round(Date.now() / 1000);
 };
 
@@ -580,12 +580,12 @@ p5.prototype.unixTime = function() {
  * @param {String} path           the path to the folder containing sketches (Optional)
  * @param {String} prefix         the prefix used for files containing sketches (Optional)
  */
-p5.prototype.createManager = function(
+p5.prototype.createManager = function (
   numMilestones,
   path = "milestones",
-  prefix = "m",
+  prefix = "m"
 ) {
-  document.addEventListener("keypress", function(event) {
+  document.addEventListener("keypress", function (event) {
     for (let i = 0; i < numMilestones; i += 1) {
       if (event.keyCode === 49 + i) {
         const pre = document.getElementById("output");
@@ -615,12 +615,12 @@ p5.prototype.createManager = function(
  * @param {p5.Color} primary    the die's primary (background) color (Optional)
  * @param {p5.Color} secondary  the die's secondary (circle) color (Optional)
  */
-p5.prototype.die = function(
+p5.prototype.die = function (
   roll,
   x,
   y,
   primary = "white",
-  secondary = "black",
+  secondary = "black"
 ) {
   if ([1, 2, 3, 4, 5, 6].indexOf(roll) < 0) {
     throw new p5Error("roll must be an integer from 1 to 6");
@@ -672,7 +672,7 @@ p5.prototype.die = function(
  * @param {Number} height   the height of the graph (Optional)
  * @param {Number} barScale the scale factor from data values to bar height (Optional)
  */
-p5.prototype.drawBarGraph = function(data, labels, width, height, barScale) {
+p5.prototype.drawBarGraph = function (data, labels, width, height, barScale) {
   const transform_matrix = this.drawingContext.getTransform();
   const ox = transform_matrix.e;
   const oy = transform_matrix.f;
@@ -754,7 +754,7 @@ class Confetti {
     this.phase = this.pInst.random(0.5, 2);
     this.size = this.pInst.random(
       this.pInst.width / 25,
-      this.pInst.height / 50,
+      this.pInst.height / 50
     );
     this.form = this.pInst.round(this.pInst.random(0, 1));
   }
@@ -767,7 +767,7 @@ class Confetti {
     this.pInst.translate(this.x, this.y);
     this.pInst.translate(
       this.amp * Math.sin(this.time * this.phase),
-      this.speed * Math.cos(2 * this.time * this.phase),
+      this.speed * Math.cos(2 * this.time * this.phase)
     );
     this.pInst.rotate(this.time);
     this.pInst.rectMode(this.pInst.CENTER);
@@ -801,7 +801,7 @@ function createConfetti(pInst, amount) {
       pInst,
       pInst.random(0, pInst.width),
       pInst.random(-pInst.height, 0),
-      pInst.random(-1, 1),
+      pInst.random(-1, 1)
     );
   }
 }
@@ -826,7 +826,7 @@ p5.prototype.celebrate = function celebrate() {
         this,
         this.random(0, this.width),
         this.random(-this.height, 0),
-        this.random(-1, 1),
+        this.random(-1, 1)
       );
     }
   }
@@ -839,7 +839,7 @@ p5.prototype.celebrate = function celebrate() {
         this,
         this.random(0, this.width),
         this.random(-this.height, 0),
-        this.random(-1, 1),
+        this.random(-1, 1)
       );
     }
   }
@@ -863,13 +863,13 @@ p5.prototype.celebrate = function celebrate() {
  * @param {Boolean} withinBounds  constrain the value to the newly mapped range (Optional)
  * @returns
  */
-p5.prototype.linmap = function(
+p5.prototype.linmap = function (
   value,
   start1,
   stop1,
   start2,
   stop2,
-  withinBounds,
+  withinBounds
 ) {
   return this.map(value, start1, stop1, start2, stop2, withinBounds);
 };
@@ -903,7 +903,7 @@ p5.prototype._assetsRemaining = 0;
  *
  * @returns {Boolean} whether all assets have loaded
  */
-p5.prototype.assetsLoaded = function() {
+p5.prototype.assetsLoaded = function () {
   return this._preloadCount + this._assetsRemaining === 0;
 };
 
@@ -917,7 +917,7 @@ p5.prototype._loadSound = p5.prototype.loadSound;
  * @param {String} path the path to the sound file
  * @param {String} name the name of the sound file's key in the assets Object
  */
-p5.prototype.loadSound = function(path, name) {
+p5.prototype.loadSound = function (path, name) {
   this._assetsRemaining += 1;
   this.assets[name] = this._loadSound(path, () => this._assetsRemaining--);
   return this.assets[name];
@@ -933,7 +933,7 @@ p5.prototype._loadImage = p5.prototype.loadImage;
  * @param {String} path the path to the image file
  * @param {String} name the name of the image file's key in the assets Object
  */
-p5.prototype.loadImage = function(path, name) {
+p5.prototype.loadImage = function (path, name) {
   this._assetsRemaining += 1;
   this.assets[name] = this._loadImage(path, () => this._assetsRemaining--);
   return this.assets[name];
@@ -949,7 +949,7 @@ p5.prototype._loadFont = p5.prototype.loadFont;
  * @param {String} path the path to the font file
  * @param {String} name the name of the font file's key in the assets Object
  */
-p5.prototype.loadFont = function(path, name) {
+p5.prototype.loadFont = function (path, name) {
   this._assetsRemaining += 1;
   let _path = path;
   if (path === "Press Start 2P") {
@@ -967,7 +967,11 @@ p5.prototype.loadFont = function(path, name) {
  *  @param {Number} thickness the thickness of the crosshair
  * @param fontSize size of the text
  */
-p5.prototype.crosshair = function(color = "white", thickness = 1, fontSize = 20) {
+p5.prototype.crosshair = function (
+  color = "white",
+  thickness = 1,
+  fontSize = 20
+) {
   let x = this.mouseX;
   let y = this.mouseY;
 
@@ -979,11 +983,11 @@ p5.prototype.crosshair = function(color = "white", thickness = 1, fontSize = 20)
   this.textSize(fontSize);
   this.line(0, y, this.width, y);
 
-  this.push()
-  this.strokeWeight(0)
-  this.fill("black")
-  this.rect(x+16,y+16,140,50,30)
-  this.pop()
+  this.push();
+  this.strokeWeight(0);
+  this.fill("black");
+  this.rect(x + 16, y + 16, 140, 50, 30);
+  this.pop();
 
   this.fill(color);
   this.text(`x: ${x}, y: ${y}`, x + 32, y + 32);
@@ -996,7 +1000,7 @@ p5.prototype.crosshair = function(color = "white", thickness = 1, fontSize = 20)
 };
 
 p5.Element.prototype._position = p5.Element.prototype.position;
-p5.Element.prototype.position = function() {
+p5.Element.prototype.position = function () {
   if (this._pInst._coordinateMode === this._pInst.BOTTOM_LEFT) {
     arguments[1] = this._pInst.height - arguments[1];
     this._position(...arguments);
