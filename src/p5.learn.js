@@ -357,9 +357,10 @@ p5.prototype.arrow = function (tailX, tailY, headX, headY) {
  * @param {Number} size  the extent of the axes
  * @param {p5.Color} clr the color to render the planes oriented along each axis
  */
-p5.prototype.draw3DAxes = function (size, clr = "violet") {
+p5.prototype.draw3DAxes = function (size, ticks = false, planes = true, clr = "violet") {
   const _clr = this.color(clr);
   this.push();
+  this.angleMode(this.DEGREES);
 
   const sz = size / 30;
   this.stroke(255);
@@ -368,18 +369,40 @@ p5.prototype.draw3DAxes = function (size, clr = "violet") {
   this.drawYAxis(size, sz);
   this.drawZAxis(size, sz);
 
+  if(ticks){
+    this.push();
+    this.scale(-1, -1, -1);
+    this.drawXAxis(size, sz);
+    this.drawYAxis(size, sz);
+    this.drawZAxis(size, sz);
+    this.pop();
+    this.textAlign(this.CENTER, this.CENTER);
+    this.textSize(10);
+    for(let x = -5; x <= 5; x++){
+      this.adaptiveText(x*2*size/10, x*2*size/10, 10, 10);
+    };
+    for(let y = -5; y <= 5; y++){
+      this.adaptiveText(y*2*size/10, 10, y*2*size/10, 10);
+    };
+    for(let z = -5; z <= 5; z++){
+      this.adaptiveText(z*2*size/10, 10, 10, z*2*size/10);
+    };
+  }
+  
   this.stroke(_clr);
   this.drawOrigin(sz);
 
-  const planeSize = 2 * (size + sz);
-  _clr.setAlpha(35);
-  this.fill(_clr);
-  this.noStroke();
-  this.plane(planeSize, planeSize);
-  this.rotateX(90);
-  this.plane(planeSize, planeSize);
-  this.rotateY(90);
-  this.plane(planeSize, planeSize);
+  if (planes){
+    const planeSize = 2 * (size + sz);
+    _clr.setAlpha(35);
+    this.fill(_clr);
+    this.noStroke();
+    this.plane(planeSize, planeSize);
+    this.rotateX(90);
+    this.plane(planeSize, planeSize);
+    this.rotateY(90);
+    this.plane(planeSize, planeSize);
+  }
   this.pop();
 };
 
@@ -1009,4 +1032,46 @@ p5.Element.prototype.position = function () {
   } else {
     this._position(...arguments);
   }
+};
+
+// global variable that will be assigned a camera if it doesn't, when the adaptiveText() function is called
+p5.prototype.text_cam;
+
+/**
+ *  Displays the mouseX and mouseY coords as a crosshair
+ *
+ *  @param {String} _text the text to be shown
+ *  @param {Number} x the x-coordinate of where the text shall be drawn
+ *  @param {Number} y the y-coordinate of where the text shall be drawn
+ *  @param {Number} z the z-coordinate of where the text shall be drawn
+ */
+p5.prototype.adaptiveText = function (_text, x, y, z) {
+  if (!this.text_cam) this.text_cam = this.createCamera();
+  
+  this.push();
+  this.angleMode(this.DEGREES);
+  this.translate(x, y, z);
+  // rotation scheme
+  let X = this.text_cam..eyeX - x;
+  let Y = this.text_cam.eyeY - y;
+  let Z = this.text_cam.eyeZ - z;
+  let R = this.sqrt(X**2+Y**2+Z**2);
+  // finding polar angles
+  let theta = this.acos(Z/R); // between vector and z axis
+  let phi = this.atan2(Y, X); // between vector's projection on xy plane and x axis toward y axis in the first quadrant
+  
+  // execute the transformation
+  this.rotateZ(phi);
+  this.rotateY(theta);
+  // this is a temporary solution that's very good
+  if(X<0){
+    this.rotateZ(180)
+  };
+  // end of it
+  this.push();
+  // if the text is flipped when you call it in python, just let this be scale(1, -1, 1), I don't know why, possibly we did something when we modified text()
+  this.scale(1, 1, 1);
+  this.text(_text, 0, 0);
+  this.pop();
+  this.pop();
 };
