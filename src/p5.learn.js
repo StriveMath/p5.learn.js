@@ -875,6 +875,16 @@ p5.prototype.linmap = function (
 };
 
 /**
+ * Wraps p5's filter() function since the name is already in use in Python.
+ * applies an image filter to the canvas https://p5js.org/reference/#/p5/filter.
+
+ */
+p5.prototype.filterCanvas = function (
+) {
+  return this.filter(...arguments);
+};
+
+/**
  *  A custom Error type that enables the FES to work from Python.
  *
  * @param {String} message the error message to display
