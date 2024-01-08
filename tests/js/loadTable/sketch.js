@@ -7,12 +7,14 @@ function preload() {
     "csv",
     "Header"
   );
-  console.log("preload >", data);
+  console.log("preload >", data.rows);
+  console.log("preload >", data.getRowCount());
 }
 
 function setup() {
   console.log("setup");
-  console.log("setup >", data);
+  console.log("setup >", data.rows);
+  console.log("setup >", data.getRowCount());
 }
 
 function draw() {}
