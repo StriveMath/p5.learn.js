@@ -150,16 +150,43 @@ p5.prototype.image = function (
 p5.prototype.__updateNextMouseCoords = p5.prototype._updateNextMouseCoords;
 p5.prototype._updateNextMouseCoords = function (evt) {
   if (this._coordinateMode === this.BOTTOM_LEFT && !this._renderer?.isP3D) {
-    const _evt = new Proxy(evt, {
-      get: (target, prop) => {
-        if (prop === "clientY") return this.height - target[prop];
-        if (prop === "movementY") return -target[prop];
-        return target[prop];
-      },
-    });
+    const _evt = {
+      clientX: evt.clientX,
+      clientY: this.height - evt.clientY,
+      movementX: evt.movementX,
+      movementY: -evt.movementY,
+      touches:
+        evt.touches &&
+        [...evt.touches].map((t) => ({
+          identifier: t.identifier,
+          clientX: t.clientX,
+          clientY: this.height - t.clientY,
+        })),
+    };
     this.__updateNextMouseCoords(_evt);
   } else {
     this.__updateNextMouseCoords(...arguments);
+  }
+};
+
+p5.prototype.__updateTouchCoords = p5.prototype._updateTouchCoords;
+p5.prototype._updateTouchCoords = function (evt) {
+  if (this._coordinateMode === this.BOTTOM_LEFT && !this._renderer?.isP3D) {
+    const _evt = {
+      touches: [...evt.touches].map((t) => ({
+        identifier: t.identifier,
+        clientX: t.clientX,
+        clientY: this.height - t.clientY,
+      })),
+      touches: [...evt.changedTouches].map((t) => ({
+        identifier: t.identifier,
+        clientX: t.clientX,
+        clientY: this.height - t.clientY,
+      })),
+    };
+    this.__updateTouchCoords(_evt);
+  } else {
+    this.__updateTouchCoords(...arguments);
   }
 };
 
@@ -468,6 +495,13 @@ p5.prototype.drawVector = function (O_x, O_y, V, dash = false) {
  */
 p5.prototype.mouse = function () {
   const transform_matrix = this.drawingContext.getTransform();
+
+  transform_matrix.a /= this.pixelDensity();
+  transform_matrix.b /= this.pixelDensity();
+  transform_matrix.c /= this.pixelDensity();
+  transform_matrix.d /= this.pixelDensity();
+  transform_matrix.e /= this.pixelDensity();
+  transform_matrix.f /= this.pixelDensity();
 
   const m = {
     x: this.mouseX - transform_matrix.e,
@@ -879,8 +913,7 @@ p5.prototype.linmap = function (
  * applies an image filter to the canvas https://p5js.org/reference/#/p5/filter.
 
  */
-p5.prototype.filterCanvas = function (
-) {
+p5.prototype.filterCanvas = function () {
   return this.filter(...arguments);
 };
 
@@ -1021,7 +1054,6 @@ p5.Element.prototype.position = function () {
   }
 };
 
-
 /**
  *  Draws a vertical line at a given x co-ord between two y-cords
  *
@@ -1029,13 +1061,13 @@ p5.Element.prototype.position = function () {
  *  @param {Number} start the start y co-ord
  *  @param {Number} stop the end y co-ord
  */
-p5.prototype.verticalLine = function(x, start, stop){
-  this.push()
-  const startY = start ? start: 0
-  const endY = stop? stop: this.height
-  this.line(x,startY, x,endY)
-  this.pop()
-}
+p5.prototype.verticalLine = function (x, start, stop) {
+  this.push();
+  const startY = start ? start : 0;
+  const endY = stop ? stop : this.height;
+  this.line(x, startY, x, endY);
+  this.pop();
+};
 
 /**
  *  Draws a horizontal line at a given y co-ord between two x-cords
@@ -1044,25 +1076,25 @@ p5.prototype.verticalLine = function(x, start, stop){
  *  @param {Number} start the start x co-ord
  *  @param {Number} stop the end x co-ord
  */
-p5.prototype.horizontalLine = function(y, start, stop){
-  this.push()
-  const startX = start ? start: 0
-  const endX = stop? stop: this.height
-  this.line(startX,y, endX,y)
-  this.pop()
-}
+p5.prototype.horizontalLine = function (y, start, stop) {
+  this.push();
+  const startX = start ? start : 0;
+  const endX = stop ? stop : this.height;
+  this.line(startX, y, endX, y);
+  this.pop();
+};
 
-p5.prototype.table = function(label,value){
-  if(!document.body){
-    return
+p5.prototype.table = function (label, value) {
+  if (!document.body) {
+    return;
   }
-  const d = document.getElementById(label)
-  if(d){
-    d.innerHTML = `${label}: ${value}`
-  }else{
-    const p = document.createElement("p")
-    p.id = label
-    p.innerHTML =  `${label}: ${value}`
-    document.body.appendChild(p)
+  const d = document.getElementById(label);
+  if (d) {
+    d.innerHTML = `${label}: ${value}`;
+  } else {
+    const p = document.createElement("p");
+    p.id = label;
+    p.innerHTML = `${label}: ${value}`;
+    document.body.appendChild(p);
   }
-}
+};
