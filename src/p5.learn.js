@@ -162,6 +162,13 @@ p5.prototype._updateNextMouseCoords = function (evt) {
           clientX: t.clientX,
           clientY: this.height - t.clientY,
         })),
+      changedTouches:
+        evt.changedTouches &&
+        [...evt.changedTouches].map((t) => ({
+          identifier: t.identifier,
+          clientX: t.clientX,
+          clientY: this.height - t.clientY,
+        })),
     };
     this.__updateNextMouseCoords(_evt);
   } else {
@@ -178,7 +185,7 @@ p5.prototype._updateTouchCoords = function (evt) {
         clientX: t.clientX,
         clientY: this.height - t.clientY,
       })),
-      touches: [...evt.changedTouches].map((t) => ({
+      changedTouches: [...evt.changedTouches].map((t) => ({
         identifier: t.identifier,
         clientX: t.clientX,
         clientY: this.height - t.clientY,
