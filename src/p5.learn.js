@@ -501,7 +501,7 @@ p5.prototype.drawVector = function (O_x, O_y, V, dash = false) {
  *
  * @returns {Object} containing the mouse's x and y-coordinates
  */
-p5.prototype.mouse = function () {
+p5.prototype.mouseAfterTransform = function () {
   const transform_matrix = this.drawingContext.getTransform();
 
   transform_matrix.a /= this.pixelDensity();
@@ -555,11 +555,11 @@ class MovableCircle {
     }
     if (this.isMovable) {
       if (this.locked.x === "free") {
-        this.x = this.pInst.mouse().x;
+        this.x = this.pInst.mouseAfterTransform().x;
       }
 
       if (this.locked.y === "free") {
-        this.y = this.pInst.mouse().y;
+        this.y = this.pInst.mouseAfterTransform().y;
       }
     }
     this.pInst.circle(this.x, this.y, this.d);
@@ -568,7 +568,7 @@ class MovableCircle {
   }
 
   isMouseHovering() {
-    const m = this.pInst.mouse();
+    const m = this.pInst.mouseAfterTransform();
     return this.pInst.dist(m.x, m.y, this.x, this.y) < this.d / 2;
   }
 
