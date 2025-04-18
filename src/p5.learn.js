@@ -1021,12 +1021,13 @@ p5.prototype.loadFont = function (path, name) {
  * @param fontSize size of the text
  */
 p5.prototype.crosshair = function (
+  spacing = 1,
   color = "white",
   thickness = 1,
   fontSize = 20
 ) {
-  let x = this.mouseX;
-  let y = this.mouseY;
+  let x = spacing*Math.round(this.mouseX/spacing);
+  let y = spacing*Math.round(this.mouseY/spacing);
 
   this.push();
   this.cursor("NONE");
